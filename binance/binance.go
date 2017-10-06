@@ -1,5 +1,5 @@
 /*
-    client.go
+    binance.go
         Wrapper for the Binance Exchange API
 
     Authors:
@@ -12,6 +12,7 @@
 package binance
 
 import (
+    //"errors"
 )
 
 const (
@@ -22,7 +23,16 @@ const (
 type Binance struct {
     client *Client
 }
+/*
+func handleErr(r jsonResponse) error {
 
+    if !r.Success {
+        return errors.New(r.Message)
+    }
+
+    return nil
+}
+*/
 func New(key, secret string) *Binance {
     client := NewClient(key, secret)
     return &Binance{client}

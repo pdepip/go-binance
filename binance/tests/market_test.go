@@ -1,7 +1,7 @@
 package market_test
 
 import (
-    "fmt"
+//    "fmt"
     "testing"
     "go-binance/binance"
 )

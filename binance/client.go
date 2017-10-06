@@ -14,8 +14,12 @@ package binance
 import (
     "fmt"
     "time"
+    "errors"
     "strings"
     "net/http"
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
     "encoding/json"
 )
 
@@ -35,9 +39,9 @@ func NewClient(key, secret string) (c *Client) {
     return client
 }
 
-func (self *Client) do(method, resource, payload string, auth bool, result interface{}) (res *http.Response, err error) {
+func (c *Client) do(method, resource, payload string, auth bool, result interface{}) (res *http.Response, err error) {
 
-    fullUrl := fmt.Sprintf("%s/%s/%s", BaseUrl, Version, resource)
+    fullUrl := fmt.Sprintf("%s/%s", BaseUrl, resource)
 
     req, err := http.NewRequest(method, fullUrl, strings.NewReader(payload))
     if err != nil {
@@ -48,28 +52,41 @@ func (self *Client) do(method, resource, payload string, auth bool, result inter
 
     if auth {
 
-        if len(c.apiKey) == 0 || len(c.apiSecret) == 0 {
+        if len(c.key) == 0 || len(c.secret) == 0 {
             err = errors.New("Private endpoints requre you to set an API Key and API Secret")
             return
         }
 
-        req.Header.Add("X-MBX-APIKEY", c.apiKey)
+        req.Header.Add("X-MBX-APIKEY", c.key)
+
+        q := req.URL.Query()
 
         timestamp := time.Now().Unix() * 1000
-        q := req.URL.Query()
-        q.Set("timestamp", timestamp)
+        q.Set("timestamp", fmt.Sprintf("%d", timestamp))
+        mac := hmac.New(sha256.New, []byte(c.secret))
 
-        fmt.Println(q)
-        
+        _, err := mac.Write([]byte(q.Encode()))
+        if err != nil {
+            return nil, err
+        }
+        signature := hex.EncodeToString(mac.Sum(nil))
+        q.Set("signature", signature)
+
+        req.URL.RawQuery = q.Encode()         
     }   
 
-    resp, err := self.httpClient.Do(req)
+    resp, err := c.httpClient.Do(req)
     if err != nil {
+        fmt.Println("yo", err)
         return
     }
+    fmt.Println("bitch")
     defer resp.Body.Close()
 
+    fmt.Println(resp)
     if resp != nil {
+
+        fmt.Println(resp)
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)
         return
