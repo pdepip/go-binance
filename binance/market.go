@@ -7,18 +7,19 @@ package binance
 
 import (
     "fmt"
+    "strconv"
+    "encoding/json"
 )
 
-type Order [2]struct {
+type Order struct {
     Price    float64 `json:",string"`
     Quantity float64 `json:",string"`
-    Data     []byte
 }
 
 type OrderBook struct {
     LastUpdatedId int64 `json:"lastUpdatedId"`
-    Bids [][]Order `json:"bids"`
-    Asks [][]Order `json:"asks"`
+    Bids []Order `json:"bids"`
+    Asks []Order `json:"asks"`
 }
 
 //
@@ -31,3 +32,23 @@ func (b *Binance) GetOrderBook(symbol string, limit int64) (book OrderBook, err 
     return
 }
 
+func (o *Order) UnmarshalJSON(b []byte) error {
+    var s [2]string
+
+    err := json.Unmarshal(b, &s)
+    if err != nil {
+        return err
+    }
+
+    o.Price, err = strconv.ParseFloat(s[0], 64)
+    if err != nil {
+        return err
+    }
+
+    o.Quantity, err = strconv.ParseFloat(s[1], 64)
+    if err != nil {
+        return err
+    }
+
+    return nil
+}

@@ -14,12 +14,7 @@ func TestGetOrderBook(t *testing.T) {
     limit = 100
     
     binance := binance.New("", "")
-    stuff ,err := binance.GetOrderBook(symbol, limit)
-    fmt.Printf("%+v\n", stuff)
-
-    for _, v := range stuff.Bids {
-        fmt.Println(v)
-    }
+    _, err := binance.GetOrderBook(symbol, limit)
 
     if err != nil {
         t.Fatal(err)
