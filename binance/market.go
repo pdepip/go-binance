@@ -36,6 +36,7 @@ type AggTrade struct {
     BestMatch    bool    `json:"M"`
 }
 
+
 //
 //
 func (b *Binance) GetOrderBook(symbol string, limit int64) (book OrderBook, err error) {
@@ -67,6 +68,23 @@ func (o *Order) UnmarshalJSON(b []byte) error {
     return nil
 }
 
+var IntervalEnum = map[string]bool {
+    "1m": true,
+    "3m": true,
+    "5m": true,
+    "15m": true,
+    "30m": true,
+    "1h": true,
+    "2h": true,
+    "4h": true,
+    "6h": true,
+    "8h": true,
+    "12h": true,
+    "1d": true,
+    "3d": true,
+    "1w": true,
+    "1m": true,
+}       
 
 //
 //
