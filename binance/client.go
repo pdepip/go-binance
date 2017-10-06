@@ -13,6 +13,7 @@ package binance
 
 import (
     "fmt"
+    "time"
     "strings"
     "net/http"
     "encoding/json"
@@ -44,6 +45,23 @@ func (self *Client) do(method, resource, payload string, auth bool, result inter
     }
 
     req.Header.Add("Accept", "application/json")
+
+    if auth {
+
+        if len(c.apiKey) == 0 || len(c.apiSecret) == 0 {
+            err = errors.New("Private endpoints requre you to set an API Key and API Secret")
+            return
+        }
+
+        req.Header.Add("X-MBX-APIKEY", c.apiKey)
+
+        timestamp := time.Now().Unix() * 1000
+        q := req.URL.Query()
+        q.Set("timestamp", timestamp)
+
+        fmt.Println(q)
+        
+    }   
 
     resp, err := self.httpClient.Do(req)
     if err != nil {
