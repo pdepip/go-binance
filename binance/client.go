@@ -36,7 +36,7 @@ func NewClient(key, secret string) (c *Client) {
 
 func (self *Client) do(method, resource, payload string, auth bool, result interface{}) (res *http.Response, err error) {
 
-    fullUrl := fmt.Sprintf("%s/%s/%s", BaseUrl, Version, resource)
+    fullUrl := fmt.Sprintf("%s/%s", BaseUrl, resource)
 
     req, err := http.NewRequest(method, fullUrl, strings.NewReader(payload))
     if err != nil {

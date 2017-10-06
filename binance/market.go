@@ -2,6 +2,9 @@
     market.go
         Market Data Endpoints for the Binance Exchange API
 
+    To Do:
+        1. Document Functions
+        2. Optional Parameters
 */
 package binance
 
@@ -22,11 +25,22 @@ type OrderBook struct {
     Asks []Order `json:"asks"`
 }
 
+type AggTrade struct {
+    TradeId      int64   `json:"a"`
+    Price        float64 `json:"p,string"`
+    Quantity     float64 `json:"q,string"`
+    FirstTradeId int64   `json:"f"`
+    LastTradeId  int64   `json:"l"`
+    Timestamp    int64   `json:"T"`
+    Maker        bool    `json:"m"`
+    BestMatch    bool    `json:"M"`
+}
+
 //
 //
 func (b *Binance) GetOrderBook(symbol string, limit int64) (book OrderBook, err error) {
     
-    reqUrl := fmt.Sprintf("depth?symbol=%s&limit=%d", symbol, limit)
+    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", symbol, limit)
 
     _, err = b.client.do("GET", reqUrl, "", false, &book)
     return
@@ -52,3 +66,15 @@ func (o *Order) UnmarshalJSON(b []byte) error {
 
     return nil
 }
+
+
+//
+//
+func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
+
+    reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", symbol)
+
+    _, err = b.client.do("GET", reqUrl, "", false, &trades)
+    return
+}
+
