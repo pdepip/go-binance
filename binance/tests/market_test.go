@@ -32,3 +32,15 @@ func TestGetAggTrades(t *testing.T) {
     }
 }
 
+func TestGetKlines(t *testing.T) {
+
+    // Params
+    symbol := "BNBBTC"
+    interval := "1m"
+
+    binance := binance.New("", "")
+    _, err := binance.GetKlines(symbol, interval)
+    if err != nil {
+        t.Fatal(err)
+    }
+}
