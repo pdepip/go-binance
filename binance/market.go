@@ -50,8 +50,41 @@ type Kline struct {
     TakerQuoteVolume float64
 }
 
+type ChangeStats struct {
+    PriceChange        float64 `json:"priceChange,string"`
+    PriceChangePercent float64 `json:"priceChangePercent,string"`
+    WeightedAvgPrice   float64 `json:"weightedAvgPrice,string"`
+    PrevClosePrice     float64 `json:"prevClosePrice,string"`
+    LastPrice          float64 `json:"lastPrice,string"`
+    BidPrice           float64 `json:"bidPrice,string"`
+    AskPrice           float64 `json:"askPrice,string"`
+    OpenPrice          float64 `json:"openPrice,string"`
+    HighPrice          float64 `json:"highPrice,string"`
+    LowPrice           float64 `json:"lowPrice,string"`
+    Volume             float64 `json:"volume,string"`
+    OpenTime           int64   `json:"openTime"`
+    CloseTime          int64   `json:"closeTime"`
+    FirstId            int64   `json:"firstId"`
+    LastId             int64   `json:"lastId"`
+    Count              int64   `json:"count"`
+
+}
+
+type TickerPrice struct {
+    Symbol string  `json:"symbol"`
+    Price  float64 `json:"price,string"`
+}
+
+type BookTicker struct {
+    Symbol      string  `json:"symbol"`
+    BidPrice    float64 `json:"bidPrice,string"`
+    BidQuantity float64 `json:"bidQuantity,string"`
+    AskPrice    float64 `json:"askPrice,string"`
+    AskQuantity float64 `json:"askQuantity,string"`
+}
+
 //
-//
+// Get order book
 func (b *Binance) GetOrderBook(symbol string, limit int64) (book OrderBook, err error) {
     
     reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", symbol, limit)
@@ -100,7 +133,7 @@ var IntervalEnum = map[string]bool {
 }       
 
 //
-//
+// Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
 func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
 
     reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", symbol)
@@ -110,7 +143,7 @@ func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
 }
 
 //
-//
+// Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
 func (b *Binance) GetKlines(symbol, interval string) (klines []Kline, err error) {
 
     reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", symbol, interval)
@@ -177,3 +210,34 @@ func (k *Kline) UnmarshalJSON(b []byte) error {
 
     return nil
 }
+
+//
+// 24 hour price change statistics.
+func (b *Binance) Get24Hr(symbol string) (changeStats ChangeStats, err error) {
+
+    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", symbol)
+
+    _, err = b.client.do("GET", reqUrl, "", false, &changeStats)
+    return
+}
+
+//
+// Latest price for all symbols.
+func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
+
+    reqUrl := "v1/ticker/allPrices"
+
+    _, err = b.client.do("GET", reqUrl, "", false, &prices)
+    return
+}
+
+//
+// Best price/qty on the order book for all symbols.
+func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
+
+    reqUrl := "v1/ticker/allBookTickers"
+
+    _, err = b.client.do("GET", reqUrl, "", false, &booktickers)
+    return
+}
+

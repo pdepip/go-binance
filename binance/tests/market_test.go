@@ -44,3 +44,34 @@ func TestGetKlines(t *testing.T) {
         t.Fatal(err)
     }
 }
+
+func TestGet24Hr(t *testing.T) {
+
+    //Params 
+    symbol := "BNBBTC"
+
+    binance := binance.New("", "")
+    _, err := binance.Get24Hr(symbol)
+    if err != nil {
+        t.Fatal(err)
+    }
+}
+
+func TestGetAllPrices(t *testing.T) {
+
+    binance := binance.New("", "")
+    _, err := binance.GetAllPrices()
+    if err != nil {
+        t.Fatal(err)
+    }
+}
+
+func TestGetBookTickers(t *testing.T) {
+
+    binance := binance.New("", "")
+    _, err := binance.GetBookTickers()
+    if err != nil {
+        t.Fatal(err)
+    }
+}
+
