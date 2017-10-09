@@ -42,26 +42,6 @@ func TestNewOrder(t *testing.T) {
 
 }
 
-
-func TestCancelOrder(t *testing.T) {
-
-    // Params
-    symbol := "BNBBTC"
-    var orderId int64
-    orderId = 6522462
-
-
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    canceledOrder, err := binance.CancelOrder(symbol, orderId)
-
-    if err != nil {
-        t.Fatal(err)
-    }
-
-    t.Logf("%+v\n", canceledOrder)
-
-    return
-}
 */
 
 func TestQueryOrder(t *testing.T) {
@@ -81,5 +61,26 @@ func TestQueryOrder(t *testing.T) {
 
     t.Logf("%+v\n", status)
 }
+
+
+func TestCancelOrder(t *testing.T) {
+
+    // Param
+    query := binance.OrderQuery {
+        Symbol: "BNBBTC",
+        OrderId: 6528503,
+    }
+
+    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    canceledOrder, err := binance.CancelOrder(query)
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", canceledOrder)
+}
+
+
 
 

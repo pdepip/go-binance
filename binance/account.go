@@ -72,10 +72,31 @@ type DeletedOrder struct {
     ClientOrderId     string `json:"clientOrderId"`
 }
 
+// Input for endpoint: GET & DELETE /api/v3/order
+type OrderQuery struct {
+    Symbol            string
+    OrderId           int64
+    RecvWindow        int64
+}
 
-func (b *Binance) CancelOrder(symbol string, orderId int64) (order DeletedOrder, err error) {
 
-    reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d", symbol, orderId)
+func (b *Binance) CancelOrder(query OrderQuery) (order DeletedOrder, err error) {
+
+    if len(query.Symbol) == 0 {
+        err = errors.New("OrderQuery must contain a symbol")
+        return
+    }
+
+    if query.OrderId == 0 {
+        err = errors.New("OrderQuery must contain an orderId")
+        return
+    }
+
+    if query.RecvWindow == 0 {
+        query.RecvWindow = 5000
+    }
+
+    reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d&recvWindow", query.Symbol, query.OrderId, query.RecvWindow)
 
     _, err = b.client.do("DELETE", reqUrl, "", true, &order)
     if err != nil {
@@ -103,17 +124,11 @@ type OrderStatus struct {
     Time          int64   `json:"time"`
 }
 
-type OrderQuery struct {
-    Symbol            string
-    OrderId           int64
-    OrigClientOrderId string
-    RecvWindow        int64
-}
 
 func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 
     if len(query.Symbol) == 0 {
-        err = errors.New("OrderQuery must contain a val symbol")
+        err = errors.New("OrderQuery must contain a symbol")
         return
     }
 
