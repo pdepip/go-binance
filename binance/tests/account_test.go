@@ -8,6 +8,7 @@ import (
 )
 
 
+/*
 func TestGetAccountInfo(t *testing.T) {
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
@@ -20,7 +21,6 @@ func TestGetAccountInfo(t *testing.T) {
     t.Logf("%+v\n", account)
 }
 
-/*
 func TestNewOrder(t *testing.T) {
 
     // Params 
@@ -32,12 +32,54 @@ func TestNewOrder(t *testing.T) {
     price := 0.00025
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    _, err := binance.NewOrder(symbol, side, orderType, timeInForce, quantity, price)
+    order, err := binance.NewOrder(symbol, side, orderType, timeInForce, quantity, price)
     
     if err != nil {
         t.Fatal(err)
     }
 
-    //t.Logf("%+v\n", order)
+    t.Logf("%+v\n", order)
+
+}
+
+
+func TestCancelOrder(t *testing.T) {
+
+    // Params
+    symbol := "BNBBTC"
+    var orderId int64
+    orderId = 6522462
+
+
+    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    canceledOrder, err := binance.CancelOrder(symbol, orderId)
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", canceledOrder)
+
+    return
 }
 */
+
+func TestQueryOrder(t *testing.T) {
+
+    // Param
+    query := binance.OrderQuery{
+        Symbol:  "BNBBTC",
+        OrderId: 6528503,
+    }
+
+    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    status, err := binance.CheckOrder(query)
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", status)
+}
+
+
