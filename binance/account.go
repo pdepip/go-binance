@@ -11,6 +11,23 @@ import (
 )
 
 
+var OrderSideEnum = map[string]bool {
+    "BUY":  true,
+    "SELL": true,
+}
+
+var OrderTypeEnum = map[string]bool {
+    "LIMIT":  true,
+    "MARKET": true,
+}
+
+var OrderTIFEnum = map[string]bool {
+    "GTC": true,
+    "IOC": true,
+}
+
+
+
 // Result from endpoint: GET /api/v3/account
 type Account struct {
     MakerCommission  int64     `json:"makerCommission"`
@@ -51,11 +68,51 @@ type PlacedOrder struct {
     TransactTime  int64  `json:"transactTime"`
 }
 
-func (b *Binance) NewOrder(symbol string, side string, orderType string, timeInForce string, quantity float64, price float64) (order PlacedOrder, err error) {
+// Input for endpoint: POST /api/v3/order
+type NewOrder struct {
+    Symbol      string
+    Side        string
+    Type        string
+    TimeInForce string
+    Quantity    float64
+    Price       float64
+}
 
-    reqUrl := fmt.Sprintf("v3/order?symbol=%s&side=%s&type=%s&timeInForce=%s&quantity=%f&price=%f", symbol, side, orderType, timeInForce, quantity, price)
+func (b *Binance) PlaceOrder(o NewOrder) (res PlacedOrder, err error) {
 
-    _, err = b.client.do("POST", reqUrl, "", true, &order)
+    if len(o.Symbol) == 0 {
+        err = errors.New("Order must contain a symbol")
+        return
+    }
+
+    if !OrderSideEnum[o.Side] {
+        err = errors.New("Invalid or empty order side")
+        return
+    }
+
+    if !OrderTypeEnum[o.Type] {
+        err = errors.New("Invalid or empty order type")
+        return
+    }
+
+    if !OrderTIFEnum[o.TimeInForce] {
+        err = errors.New("Invalid or empty order timeInForce")
+        return
+    }
+
+    if o.Quantity <= 0.0 {
+        err = errors.New("Invalid or empty order quantity")
+        return
+    }
+
+    if o.Price <= 0.0 {
+        err = errors.New("Invalid or empty order price")
+        return
+    }
+
+    reqUrl := fmt.Sprintf("v3/order?symbol=%s&side=%s&type=%s&timeInForce=%s&quantity=%f&price=%f", o.Symbol, o.Side, o.Type, o.TimeInForce, o.Quantity, o.Price)
+
+    _, err = b.client.do("POST", reqUrl, "", true, &res)
     if err != nil {
         return
     }
