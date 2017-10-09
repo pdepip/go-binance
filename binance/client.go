@@ -72,8 +72,7 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
         }
 
         signature := hex.EncodeToString(mac.Sum(nil))
-        q.Set("signature", signature)
-        req.URL.RawQuery = q.Encode()
+        req.URL.RawQuery = q.Encode() + "&signature=" + signature
         fmt.Println(req.URL)
     }   
 
@@ -94,5 +93,3 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
     }
     return
 }
-
-
