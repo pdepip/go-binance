@@ -16,6 +16,7 @@ import (
     "time"
     "errors"
     "strings"
+    "io/ioutil"
     "net/http"
     "crypto/hmac"
     "crypto/sha256"
@@ -63,30 +64,30 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
 
         timestamp := time.Now().Unix() * 1000
         q.Set("timestamp", fmt.Sprintf("%d", timestamp))
-        mac := hmac.New(sha256.New, []byte(c.secret))
 
+        mac := hmac.New(sha256.New, []byte(c.secret))
         _, err := mac.Write([]byte(q.Encode()))
         if err != nil {
             return nil, err
         }
+
         signature := hex.EncodeToString(mac.Sum(nil))
         q.Set("signature", signature)
-
-        req.URL.RawQuery = q.Encode()         
+        req.URL.RawQuery = q.Encode()
+        fmt.Println(req.URL)
     }   
 
     resp, err := c.httpClient.Do(req)
     if err != nil {
-        fmt.Println("yo", err)
         return
     }
-    fmt.Println("bitch")
     defer resp.Body.Close()
 
-    fmt.Println(resp)
-    if resp != nil {
+    body, err := ioutil.ReadAll(resp.Body)
+    bodyString := string(body)
+    fmt.Println(bodyString)
 
-        fmt.Println(resp)
+    if resp != nil {
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)
         return
