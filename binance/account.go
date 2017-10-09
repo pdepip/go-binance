@@ -27,7 +27,6 @@ var OrderTIFEnum = map[string]bool {
 }
 
 
-
 // Result from endpoint: GET /api/v3/account
 type Account struct {
     MakerCommission  int64     `json:"makerCommission"`
@@ -69,48 +68,91 @@ type PlacedOrder struct {
 }
 
 // Input for endpoint: POST /api/v3/order
-type NewOrder struct {
+type LimitOrder struct {
     Symbol      string
     Side        string
     Type        string
     TimeInForce string
     Quantity    float64
     Price       float64
+    RecvWindow  int64
 }
 
-func (b *Binance) PlaceOrder(o NewOrder) (res PlacedOrder, err error) {
+// Validating a Limit Order
+func (l *LimitOrder) ValidateLimitOrder() error {
+    switch {
+        case len(l.Symbol) == 0:
+            return errors.New("Order must contain a symbol")
+        case !OrderSideEnum[l.Side]:
+            return errors.New("Invalid or empty order side")
+        case l.Type != "LIMIT":
+            return errors.New("Invalid LIMIT order type")
+        case !OrderTIFEnum[l.TimeInForce]:
+            return errors.New("Invalid or empty order timeInForce")
+        case l.Quantity <= 0.0:
+            return errors.New("Invalud or empty order quantity")
+        case l.Price <= 0.0:
+           return errors.New("Invalud or empty order price")
+        case l.RecvWindow == 0:
+            l.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
+}
 
-    if len(o.Symbol) == 0 {
-        err = errors.New("Order must contain a symbol")
+func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
+
+    err = l.ValidateLimitOrder()
+    if err != nil {
         return
     }
 
-    if !OrderSideEnum[o.Side] {
-        err = errors.New("Invalid or empty order side")
+    reqUrl := fmt.Sprintf("v3/order?symbol=%s&side=%s&type=%s&timeInForce=%s&quantity=%f&price=%f&recvWindow=%d", l.Symbol, l.Side, l.Type, l.TimeInForce, l.Quantity, l.Price, l.RecvWindow)
+
+    _, err = b.client.do("POST", reqUrl, "", true, &res)
+    if err != nil {
         return
     }
 
-    if !OrderTypeEnum[o.Type] {
-        err = errors.New("Invalid or empty order type")
+    return
+}
+
+
+type MarketOrder struct {
+    Symbol      string
+    Side        string
+    Type        string
+    Quantity    float64
+    RecvWindow  int64
+}
+
+func (m *MarketOrder) ValidateMarketOrder() error {
+    switch {
+        case len(m.Symbol) == 0:
+            return errors.New("Order must contain a symbol")
+        case !OrderSideEnum[m.Side]:
+            return errors.New("Invalid or empty or side")
+        case m.Type != "MARKET":
+            return errors.New("Invalid type for a market order")
+        case m.Quantity <= 0.0:
+            return errors.New("Invalid or empty order quantity")
+        case m.RecvWindow == 0:
+            m.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
+}
+
+func (b *Binance) PlaceMarketOrder(m MarketOrder) (res PlacedOrder, err error) {
+
+    err = m.ValidateMarketOrder()
+    if err != nil {
         return
     }
 
-    if !OrderTIFEnum[o.TimeInForce] {
-        err = errors.New("Invalid or empty order timeInForce")
-        return
-    }
-
-    if o.Quantity <= 0.0 {
-        err = errors.New("Invalid or empty order quantity")
-        return
-    }
-
-    if o.Price <= 0.0 {
-        err = errors.New("Invalid or empty order price")
-        return
-    }
-
-    reqUrl := fmt.Sprintf("v3/order?symbol=%s&side=%s&type=%s&timeInForce=%s&quantity=%f&price=%f", o.Symbol, o.Side, o.Type, o.TimeInForce, o.Quantity, o.Price)
+    reqUrl := fmt.Sprintf("v3/order?symbol=%s&side=%s&type=%s&quantity=%f&recvWindow=%d", m.Symbol, m.Side, m.Type, m.Quantity, m.RecvWindow)
 
     _, err = b.client.do("POST", reqUrl, "", true, &res)
     if err != nil {
@@ -131,26 +173,36 @@ type DeletedOrder struct {
 
 // Input for endpoint: GET & DELETE /api/v3/order
 type OrderQuery struct {
-    Symbol            string
-    OrderId           int64
-    RecvWindow        int64
+    Symbol     string
+    OrderId    int64
+    RecvWindow int64
+}
+
+
+func (o *OrderQuery) ValidateOrderQuery() error {
+    switch {
+        case len(o.Symbol) == 0:
+            return errors.New("OrderQuery must contain a Symbol")
+        case o.OrderId == 0:
+            return errors.New("OrderQuery must contain an OrderId")
+        case o.RecvWindow == 0:
+            o.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
 }
 
 
 func (b *Binance) CancelOrder(query OrderQuery) (order DeletedOrder, err error) {
 
-    if len(query.Symbol) == 0 {
-        err = errors.New("OrderQuery must contain a symbol")
-        return
-    }
-
-    if query.OrderId == 0 {
-        err = errors.New("OrderQuery must contain an orderId")
-        return
-    }
-
     if query.RecvWindow == 0 {
         query.RecvWindow = 5000
+    }
+
+    err = query.ValidateOrderQuery()
+    if err != nil {
+        return
     }
 
     reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d&recvWindow", query.Symbol, query.OrderId, query.RecvWindow)
@@ -183,19 +235,14 @@ type OrderStatus struct {
 
 
 func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
-
-    if len(query.Symbol) == 0 {
-        err = errors.New("OrderQuery must contain a symbol")
-        return
-    }
-
-    if query.OrderId == 0 {
-        err = errors.New("OrderQuery must contain orderId")
-        return
-    }
-
+    /*
     if query.RecvWindow == 0 {
         query.RecvWindow = 5000
+    }
+    */
+    err = query.ValidateOrderQuery()
+    if err != nil {
+        return
     }
 
     reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d&origClientOrderId=%s&recvWindow=%d", query.Symbol, query.OrderId, query.RecvWindow)
@@ -207,3 +254,4 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
     
     return
 }
+

@@ -20,11 +20,11 @@ func TestGetAccountInfo(t *testing.T) {
 
     t.Logf("%+v\n", account)
 }
-
-func TestNewOrder(t *testing.T) {
+*/
+func TestLimitOrder(t *testing.T) {
 
     // Params
-    order := binance.NewOrder {
+    order := binance.LimitOrder {
         Symbol:      "BNBBTC",
         Side:        "BUY",
         Type:        "LIMIT",
@@ -34,7 +34,7 @@ func TestNewOrder(t *testing.T) {
     }
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    res, err := binance.PlaceOrder(order)
+    res, err := binance.PlaceLimitOrder(order)
     
     if err != nil {
         t.Fatal(err)
@@ -44,6 +44,27 @@ func TestNewOrder(t *testing.T) {
 
 }
 
+func TestMarketOrder(t *testing.T) {
+
+    // Params
+    order := binance.MarketOrder {
+        Symbol:      "BNBBTC",
+        Side:        "BUY",
+        Type:        "MARKET",
+        Quantity:    10.0,
+    }
+
+    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    res, err := binance.PlaceMarketOrder(order)
+    
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", res.OrderId)
+
+}
+/*
 
 func TestQueryOrder(t *testing.T) {
 
@@ -75,8 +96,8 @@ func TestQueryOrder(t *testing.T) {
 
     t.Logf("%+v\n", status)
 }
-*/
 
+/*
 func TestCancelOrder(t *testing.T) {
 
     // Order Param
@@ -107,4 +128,4 @@ func TestCancelOrder(t *testing.T) {
 
     t.Logf("%+v\n", canceledOrder)
 }
-
+*/
