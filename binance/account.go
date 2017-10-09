@@ -196,10 +196,6 @@ func (o *OrderQuery) ValidateOrderQuery() error {
 
 func (b *Binance) CancelOrder(query OrderQuery) (order DeletedOrder, err error) {
 
-    if query.RecvWindow == 0 {
-        query.RecvWindow = 5000
-    }
-
     err = query.ValidateOrderQuery()
     if err != nil {
         return
@@ -235,11 +231,7 @@ type OrderStatus struct {
 
 
 func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
-    /*
-    if query.RecvWindow == 0 {
-        query.RecvWindow = 5000
-    }
-    */
+
     err = query.ValidateOrderQuery()
     if err != nil {
         return
@@ -251,7 +243,43 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
     if err != nil {
         return
     }
-    
+
+    return
+}
+
+
+// Input for endpoint: GET /api/v3/openOrders
+type OpenOrdersQuery struct {
+    Symbol string
+    RecvWindow int64
+}
+
+func (o *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
+    switch {
+        case len(o.Symbol) == 0:
+            return errors.New("Invalid or empty symbol")
+        case o.RecvWindow == 0:
+            o.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
+}
+
+func (b *Binance) GetOpenOrders(q OpenOrdersQuery) (orders []OrderStatus, err error) {
+
+    err = q.ValidateOpenOrdersQuery()
+    if err != nil {
+        return
+    }
+
+    reqUrl := fmt.Sprintf("v3/openOrders?symbol=%s&recvWindow=%d", q.Symbol, q.RecvWindow)
+ 
+    _, err = b.client.do("GET", reqUrl, "", true, &orders)
+    if err != nil {
+        return
+    }
+
     return
 }
 

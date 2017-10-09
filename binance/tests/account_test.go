@@ -21,6 +21,7 @@ func TestGetAccountInfo(t *testing.T) {
     t.Logf("%+v\n", account)
 }
 */
+
 func TestLimitOrder(t *testing.T) {
 
     // Params
@@ -43,7 +44,7 @@ func TestLimitOrder(t *testing.T) {
     t.Logf("%+v\n", res.OrderId)
 
 }
-
+/*
 func TestMarketOrder(t *testing.T) {
 
     // Params
@@ -129,3 +130,19 @@ func TestCancelOrder(t *testing.T) {
     t.Logf("%+v\n", canceledOrder)
 }
 */
+
+func TestGetOpenOrders(t *testing.T) {
+
+    // Param
+    query := binance.OpenOrdersQuery {
+        Symbol: "BNBBTC",
+    }
+
+    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    openOrders, err := client.GetOpenOrders(query)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", openOrders) 
+}
