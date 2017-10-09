@@ -13,9 +13,9 @@ import (
 
 
 type Balance struct {
-    Asset  string  `json:asset`
-    Free   string  `json:free, string`
-    Locked float64 `json:locked, string`
+    Asset  string  `json:"asset"`
+    Free   float64 `json:"free,string"`
+    Locked float64 `json:"locked,string"`
 }
 
 

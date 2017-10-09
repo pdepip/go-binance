@@ -20,6 +20,7 @@ func TestGetAccountInfo(t *testing.T) {
     t.Logf("%+v\n", account)
 }
 
+/*
 func TestNewOrder(t *testing.T) {
 
     // Params 
@@ -31,11 +32,12 @@ func TestNewOrder(t *testing.T) {
     price := 0.00025
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    order, err := binance.NewOrder(symbol, side, orderType, timeInForce, quantity, price)
+    _, err := binance.NewOrder(symbol, side, orderType, timeInForce, quantity, price)
     
     if err != nil {
         t.Fatal(err)
     }
 
-    t.Logf("%+v\n", order)
+    //t.Logf("%+v\n", order)
 }
+*/

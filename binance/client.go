@@ -16,7 +16,7 @@ import (
     "time"
     "errors"
     "strings"
-    "io/ioutil"
+    //"io/ioutil"
     "net/http"
     "crypto/hmac"
     "crypto/sha256"
@@ -73,7 +73,7 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
 
         signature := hex.EncodeToString(mac.Sum(nil))
         req.URL.RawQuery = q.Encode() + "&signature=" + signature
-        fmt.Println(req.URL)
+        //fmt.Println(req.URL)
     }   
 
     resp, err := c.httpClient.Do(req)
@@ -81,11 +81,11 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
         return
     }
     defer resp.Body.Close()
-
+    /*
     body, err := ioutil.ReadAll(resp.Body)
     bodyString := string(body)
     fmt.Println(bodyString)
-
+    */
     if resp != nil {
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)
