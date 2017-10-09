@@ -46,16 +46,28 @@ type Balance struct {
 }
 
 
-func (b *Binance) GetAccountInfo() (account Account, err error) {
+func (b *Binance) GetPositions() (positions []Balance, err error) {
 
     reqUrl := fmt.Sprintf("v3/account")
+    account := Account{}
 
     _, err = b.client.do("GET", reqUrl, "", true, &account)
     if err != nil {
         return
     }
 
-    return
+    positions = make([]Balance, len(account.Balances))
+    i := 0
+        
+    for _, balance := range account.Balances {
+        if balance.Free != 0.0 || balance.Locked != 0.0 {
+            fmt.Println(balance)
+            positions[i] = balance
+            i++
+        }
+    }
+
+    return positions[:i], nil
 }
 
 
@@ -282,4 +294,5 @@ func (b *Binance) GetOpenOrders(q OpenOrdersQuery) (orders []OrderStatus, err er
 
     return
 }
+
 

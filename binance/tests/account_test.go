@@ -8,20 +8,19 @@ import (
 )
 
 
-/*
-func TestGetAccountInfo(t *testing.T) {
+func TestGetPositions(t *testing.T) {
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    account, err := binance.GetAccountInfo()
+    positions, err := binance.GetPositions()
 
     if err != nil {
         t.Fatal(err)
     }
 
-    t.Logf("%+v\n", account)
+    t.Logf("%+v\n", positions)
 }
-*/
 
+/*
 func TestLimitOrder(t *testing.T) {
 
     // Params
@@ -129,7 +128,6 @@ func TestCancelOrder(t *testing.T) {
 
     t.Logf("%+v\n", canceledOrder)
 }
-*/
 
 func TestGetOpenOrders(t *testing.T) {
 
@@ -144,5 +142,6 @@ func TestGetOpenOrders(t *testing.T) {
         t.Fatal(err)
     }
 
-    t.Logf("%+v\n", openOrders) 
+    t.Logf("%+v\n", openOrders)
 }
+*/
