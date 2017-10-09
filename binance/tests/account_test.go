@@ -20,7 +20,6 @@ func TestGetAccountInfo(t *testing.T) {
 
     t.Logf("%+v\n", account)
 }
-*/
 
 func TestNewOrder(t *testing.T) {
 
@@ -41,21 +40,34 @@ func TestNewOrder(t *testing.T) {
         t.Fatal(err)
     }
 
-    t.Logf("%+v\n", res)
+    t.Logf("%+v\n", res.OrderId)
 
 }
 
-/*
+
 func TestQueryOrder(t *testing.T) {
 
-    // Param
-    query := binance.OrderQuery{
-        Symbol:  "BNBBTC",
-        OrderId: 6528503,
+    // Order Param
+    order := binance.NewOrder {
+        Symbol:      "BNBBTC",
+        Side:        "BUY",
+        Type:        "LIMIT",
+        TimeInForce: "GTC",
+        Quantity:    50.0,
+        Price:       0.00025,
     }
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    status, err := binance.CheckOrder(query)
+    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    res, err := client.PlaceOrder(order)
+    t.Logf("%+v\n", res)
+
+    // Query Param
+    query := binance.OrderQuery{
+        Symbol:  res.Symbol,
+        OrderId: res.OrderId,
+    }
+
+    status, err := client.CheckOrder(query)
 
     if err != nil {
         t.Fatal(err)
@@ -63,18 +75,31 @@ func TestQueryOrder(t *testing.T) {
 
     t.Logf("%+v\n", status)
 }
-
+*/
 
 func TestCancelOrder(t *testing.T) {
 
-    // Param
-    query := binance.OrderQuery {
-        Symbol: "BNBBTC",
-        OrderId: 6528503,
+    // Order Param
+    order := binance.NewOrder {
+        Symbol:      "BNBBTC",
+        Side:        "BUY",
+        Type:        "LIMIT",
+        TimeInForce: "GTC",
+        Quantity:    10.0,
+        Price:       0.00025,
     }
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    canceledOrder, err := binance.CancelOrder(query)
+    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    res, err := client.PlaceOrder(order)
+    t.Logf("%+v\n", res)
+
+    // Cancel Param
+    query := binance.OrderQuery {
+        Symbol: res.Symbol,
+        OrderId: res.OrderId,
+    }
+
+    canceledOrder, err := client.CancelOrder(query)
 
     if err != nil {
         t.Fatal(err)
@@ -82,4 +107,4 @@ func TestCancelOrder(t *testing.T) {
 
     t.Logf("%+v\n", canceledOrder)
 }
-*/
+
