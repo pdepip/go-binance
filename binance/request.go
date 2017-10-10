@@ -1,62 +1,110 @@
 /*
 
-    Stores response structs for API functions
+    Stores request structs & their respectivate validation functions for Binance API
 
 */
 
 package binance
 
+import (
+    "errors"
+)
 
-// Result from: GET /api/v3/account
-type Account struct {
-    MakerCommission  int64     `json:"makerCommission"`
-    TakerCommission  int64     `json:"takerCommission"`
-    BuyerCommission  int64     `json:"buyerCommission"`
-    SellerCommission int64     `json:"sellerCommission"`
-    CanTrade         bool      `json:"canTrade"`
-    CanWithdraw      bool      `json:"canWithdraw"`
-    CanDeposit       bool      `json:"canDeposit"`
-    Balances         []Balance `json:"balances"`
+// Input for: POST /api/v3/order
+type LimitOrder struct {
+    Symbol      string
+    Side        string
+    Type        string
+    TimeInForce string
+    Quantity    float64
+    Price       float64
+    RecvWindow  int64
 }
 
-type Balance struct {
-    Asset  string  `json:"asset"`
-    Free   float64 `json:"free,string"`
-    Locked float64 `json:"locked,string"`
+// Validating a Limit Order
+func (l *LimitOrder) ValidateLimitOrder() error {
+    switch {
+        case len(l.Symbol) == 0:
+            return errors.New("Order must contain a symbol")
+        case !OrderSideEnum[l.Side]:
+            return errors.New("Invalid or empty order side")
+        case l.Type != "LIMIT":
+            return errors.New("Invalid LIMIT order type")
+        case !OrderTIFEnum[l.TimeInForce]:
+            return errors.New("Invalid or empty order timeInForce")
+        case l.Quantity <= 0.0:
+            return errors.New("Invalud or empty order quantity")
+        case l.Price <= 0.0:
+            return errors.New("Invalud or empty order price")
+        case l.RecvWindow == 0:
+            l.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
+}
+
+type MarketOrder struct {
+    Symbol     string
+    Side       string
+    Type       string
+    Quantity   float64
+    RecvWindow int64
+}
+
+func (m *MarketOrder) ValidateMarketOrder() error { 
+    switch {
+        case len(m.Symbol) == 0:
+            return errors.New("Order must contain a symbol")
+        case !OrderSideEnum[m.Side]:
+            return errors.New("Invalid or empty order side")
+        case m.Quantity <= 0.0:
+            return errors.New("Invalud or empty order quantity")
+        case m.RecvWindow == 0:
+            m.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
 }
 
 
-// Result from: POST /api/v3/order
-type PlacedOrder struct {
-    Symbol        string `json:"symbol"`
-    OrderId       int64  `json:"orderId"`
-    ClientOrderId string `json:"clientOrderId"`
-    TransactTime  int64  `json:"transactTime"`
+// Input for: GET & DELETE /api/v3/order
+type OrderQuery struct {
+    Symbol     string
+    OrderId    int64
+    RecvWindow int64
+}
+
+func (q *OrderQuery) ValidateOrderQuery() error {
+    switch {
+        case len(q.Symbol) == 0:
+            return errors.New("OrderQuery must contain a symbol")
+        case q.OrderId == 0:
+            return errors.New("OrderQuery must contain an OrderId")
+        case q.RecvWindow == 0:
+            q.RecvWindow = 5000
+            return nil
+        default
+            return nil
+    }
 }
 
 
-// Result from: DELETE /api/v3/order
-type CanceledOrder struct {
-    Symbol            string `json:"symbol"`
-    OrigClientOrderId string `json:"origClientOrderId"`
-    OrderId           int64  `json:"orderId"` 
-    ClientOrderId     string `json:"clientOrderId"`
+// Input for: GET /api/v3/openOrders
+type OpenOrdersQuery struct {
+    Symbol     string
+    RecvWindow string
 }
 
-
-// Result from: GET /api/v3/order
-type OrderStatus struct {
-    Symbol        string  `json:"symbol"`
-    OrderId       int64   `json:"orderId"`
-    ClientOrderId string  `json:"clientOrderId"`
-    Price         float64 `json:"price,string"`
-    OrigQty       float64 `json:"origQty,string"`
-    ExecutedQty   float64 `json:"executedQty,string"`
-    Status        string  `json:"status"`
-    TimeInForce   string  `json:"timeInForce"`
-    Type          string  `json:"type"`
-    Side          string  `json:"side"`
-    StopPrice     float64 `json:"stopPrice,string"`
-    IcebergQty    float64 `json:"icebergQty,string"`
-    Time          int64   `json:"time"`
+func (q *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
+    switch {
+        case len(q.Symbol) == 0:
+            return errors.New("OpenOrderQuery must contain a symbol")
+        case q.RecvWindow == 0:
+            q.RecvWindow = 5000
+            return nil
+        default:
+            return nil
+    }
 }

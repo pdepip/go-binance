@@ -47,39 +47,6 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
 }
 
 
-// Input for endpoint: POST /api/v3/order
-type LimitOrder struct {
-    Symbol      string
-    Side        string
-    Type        string
-    TimeInForce string
-    Quantity    float64
-    Price       float64
-    RecvWindow  int64
-}
-
-// Validating a Limit Order
-func (l *LimitOrder) ValidateLimitOrder() error {
-    switch {
-        case len(l.Symbol) == 0:
-            return errors.New("Order must contain a symbol")
-        case !OrderSideEnum[l.Side]:
-            return errors.New("Invalid or empty order side")
-        case l.Type != "LIMIT":
-            return errors.New("Invalid LIMIT order type")
-        case !OrderTIFEnum[l.TimeInForce]:
-            return errors.New("Invalid or empty order timeInForce")
-        case l.Quantity <= 0.0:
-            return errors.New("Invalud or empty order quantity")
-        case l.Price <= 0.0:
-           return errors.New("Invalud or empty order price")
-        case l.RecvWindow == 0:
-            l.RecvWindow = 5000
-            return nil
-        default:
-            return nil
-    }
-}
 
 func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 
@@ -99,32 +66,6 @@ func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 }
 
 
-type MarketOrder struct {
-    Symbol      string
-    Side        string
-    Type        string
-    Quantity    float64
-    RecvWindow  int64
-}
-
-func (m *MarketOrder) ValidateMarketOrder() error {
-    switch {
-        case len(m.Symbol) == 0:
-            return errors.New("Order must contain a symbol")
-        case !OrderSideEnum[m.Side]:
-            return errors.New("Invalid or empty or side")
-        case m.Type != "MARKET":
-            return errors.New("Invalid type for a market order")
-        case m.Quantity <= 0.0:
-            return errors.New("Invalid or empty order quantity")
-        case m.RecvWindow == 0:
-            m.RecvWindow = 5000
-            return nil
-        default:
-            return nil
-    }
-}
-
 func (b *Binance) PlaceMarketOrder(m MarketOrder) (res PlacedOrder, err error) {
 
     err = m.ValidateMarketOrder()
@@ -140,29 +81,6 @@ func (b *Binance) PlaceMarketOrder(m MarketOrder) (res PlacedOrder, err error) {
     }
 
     return
-}
-
-
-// Input for endpoint: GET & DELETE /api/v3/order
-type OrderQuery struct {
-    Symbol     string
-    OrderId    int64
-    RecvWindow int64
-}
-
-
-func (o *OrderQuery) ValidateOrderQuery() error {
-    switch {
-        case len(o.Symbol) == 0:
-            return errors.New("OrderQuery must contain a Symbol")
-        case o.OrderId == 0:
-            return errors.New("OrderQuery must contain an OrderId")
-        case o.RecvWindow == 0:
-            o.RecvWindow = 5000
-            return nil
-        default:
-            return nil
-    }
 }
 
 
@@ -201,24 +119,6 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
     return
 }
 
-
-// Input for endpoint: GET /api/v3/openOrders
-type OpenOrdersQuery struct {
-    Symbol string
-    RecvWindow int64
-}
-
-func (o *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
-    switch {
-        case len(o.Symbol) == 0:
-            return errors.New("Invalid or empty symbol")
-        case o.RecvWindow == 0:
-            o.RecvWindow = 5000
-            return nil
-        default:
-            return nil
-    }
-}
 
 func (b *Binance) GetOpenOrders(q OpenOrdersQuery) (orders []OrderStatus, err error) {
 
