@@ -61,7 +61,6 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
         
     for _, balance := range account.Balances {
         if balance.Free != 0.0 || balance.Locked != 0.0 {
-            fmt.Println(balance)
             positions[i] = balance
             i++
         }

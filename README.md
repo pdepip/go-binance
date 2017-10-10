@@ -33,19 +33,29 @@ client :=  binance.New(secret, key)
 
 ### Examples
 
-Get Account Balances
+Get Current Positions
 
 ```go
-import fmt
+package main
 
-accounts, err := binance.GetBalances()
+import (
+    "os"
+    "fmt"
+    "go-binance/binance"
+)
 
-if err != nil {
-	panic(err)
-}
+func main() {
 
-for _, a := range accounts {
-	fmt.println(a.Balance, a.Currency)
+    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    positions, err := binance.GetPositions()
+
+    if err != nil {
+        panic(err)
+    }
+
+    for _, p := range positions {
+        fmt.Println(p.Asset, p.Free, p.Locked)
+    }
 }
 ```
 
