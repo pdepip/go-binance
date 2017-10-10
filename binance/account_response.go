@@ -1,6 +1,6 @@
 /*
 
-    Stores response structs for API functions
+    Stores response structs for API functions account.go
 
 */
 

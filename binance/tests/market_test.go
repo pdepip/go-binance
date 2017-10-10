@@ -9,18 +9,21 @@ import (
 func TestGetOrderBook(t *testing.T) {
 
     // Params
-    symbol := "BNBBTC"
-    var limit int64
-    limit = 100
-    
-    binance := binance.New("", "")
-    _, err := binance.GetOrderBook(symbol, limit)
+    query := binance.OrderBookQuery {
+        Symbol: "BNBBTC",
+        Limit: 100,
+    }
+
+    client := binance.New("", "")
+    res, err := client.GetOrderBook(query)
 
     if err != nil {
         t.Fatal(err)
     }
-}
 
+    t.Logf("%+v\n", res)
+}
+/*
 func TestGetAggTrades(t *testing.T) {
 
     // Params
@@ -75,4 +78,4 @@ func TestGetBookTickers(t *testing.T) {
         t.Fatal(err)
     }
 }
-
+*/

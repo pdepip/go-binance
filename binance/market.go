@@ -14,16 +14,6 @@ import (
     "encoding/json"
 )
 
-type Order struct {
-    Price    float64 `json:",string"`
-    Quantity float64 `json:",string"`
-}
-
-type OrderBook struct {
-    LastUpdatedId int64 `json:"lastUpdatedId"`
-    Bids []Order `json:"bids"`
-    Asks []Order `json:"asks"`
-}
 
 type AggTrade struct {
     TradeId      int64   `json:"a"`
@@ -85,9 +75,10 @@ type BookTicker struct {
 
 //
 // Get order book
-func (b *Binance) GetOrderBook(symbol string, limit int64) (book OrderBook, err error) {
-    
-    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", symbol, limit)
+func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
+
+    err = q.ValidateOrderBookQuery()
+    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", q.Symbol, q.Limit)
 
     _, err = b.client.do("GET", reqUrl, "", false, &book)
     return
@@ -114,25 +105,7 @@ func (o *Order) UnmarshalJSON(b []byte) error {
     return nil
 }
 
-var IntervalEnum = map[string]bool {
-    "1m": true,
-    "3m": true,
-    "5m": true,
-    "15m": true,
-    "30m": true,
-    "1h": true,
-    "2h": true,
-    "4h": true,
-    "6h": true,
-    "8h": true,
-    "12h": true,
-    "1d": true,
-    "3d": true,
-    "1w": true,
-    "1M": true,
-}       
 
-//
 // Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
 func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
 
