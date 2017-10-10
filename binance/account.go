@@ -10,7 +10,7 @@ import (
     //"encoding/json"
 )
 
-
+/*
 var OrderSideEnum = map[string]bool {
     "BUY":  true,
     "SELL": true,
@@ -25,7 +25,7 @@ var OrderTIFEnum = map[string]bool {
     "GTC": true,
     "IOC": true,
 }
-
+*/
 
 // Result from endpoint: GET /api/v3/account
 type Account struct {
