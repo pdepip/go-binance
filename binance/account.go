@@ -6,7 +6,6 @@ package binance
 
 import (
     "fmt"
-    "errors"
 )
 
 

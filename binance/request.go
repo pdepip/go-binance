@@ -85,7 +85,7 @@ func (q *OrderQuery) ValidateOrderQuery() error {
         case q.RecvWindow == 0:
             q.RecvWindow = 5000
             return nil
-        default
+        default:
             return nil
     }
 }
@@ -94,7 +94,7 @@ func (q *OrderQuery) ValidateOrderQuery() error {
 // Input for: GET /api/v3/openOrders
 type OpenOrdersQuery struct {
     Symbol     string
-    RecvWindow string
+    RecvWindow int64
 }
 
 func (q *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
