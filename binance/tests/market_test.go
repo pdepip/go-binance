@@ -1,7 +1,6 @@
 package market_test
 
 import (
-//    "fmt"
     "testing"
     "go-binance/binance"
 )
@@ -23,59 +22,75 @@ func TestGetOrderBook(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-/*
+
 func TestGetAggTrades(t *testing.T) {
 
     // Params
-    symbol := "BNBBTC"
+    query := binance.SymbolQuery {
+        Symbol: "BNBBTC",
+    }
 
-    binance := binance.New("", "")
-    _, err := binance.GetAggTrades(symbol)
+    client := binance.New("", "")
+    res, err := client.GetAggTrades(query)
     if err != nil {
         t.Fatal(err)
     }
+
+    t.Logf("%+v\n", res)
 }
 
 func TestGetKlines(t *testing.T) {
 
     // Params
-    symbol := "BNBBTC"
-    interval := "1m"
+    query := binance.KlineQuery {
+        Symbol: "BNBBTC",
+        Interval: "1m",
+    }
 
-    binance := binance.New("", "")
-    _, err := binance.GetKlines(symbol, interval)
+    client := binance.New("", "")
+    res, err := client.GetKlines(query)
     if err != nil {
         t.Fatal(err)
     }
+
+    t.Logf("%+v\n", res)
 }
 
 func TestGet24Hr(t *testing.T) {
 
-    //Params 
-    symbol := "BNBBTC"
+    //Params
+    query := binance.SymbolQuery {
+        Symbol: "BNBBTC",
+    }
 
-    binance := binance.New("", "")
-    _, err := binance.Get24Hr(symbol)
+    client := binance.New("", "")
+    res, err := client.Get24Hr(query)
     if err != nil {
         t.Fatal(err)
     }
+
+    t.Logf("%+v\n", res)
 }
 
 func TestGetAllPrices(t *testing.T) {
 
-    binance := binance.New("", "")
-    _, err := binance.GetAllPrices()
+    client := binance.New("", "")
+    res, err := client.GetAllPrices()
     if err != nil {
         t.Fatal(err)
     }
+
+    t.Logf("%+v\n", res)
 }
 
 func TestGetBookTickers(t *testing.T) {
 
-    binance := binance.New("", "")
-    _, err := binance.GetBookTickers()
+    client := binance.New("", "")
+    res, err := client.GetBookTickers()
     if err != nil {
         t.Fatal(err)
     }
+
+    t.Logf("%+v\n", res)
 }
-*/
+

@@ -15,64 +15,6 @@ import (
 )
 
 
-type AggTrade struct {
-    TradeId      int64   `json:"a"`
-    Price        float64 `json:"p,string"`
-    Quantity     float64 `json:"q,string"`
-    FirstTradeId int64   `json:"f"`
-    LastTradeId  int64   `json:"l"`
-    Timestamp    int64   `json:"T"`
-    Maker        bool    `json:"m"`
-    BestMatch    bool    `json:"M"`
-}
-
-type Kline struct {
-    OpenTime         int64 
-    Open             float64
-    High             float64
-    Low              float64
-    Close            float64
-    Volume           float64
-    CloseTime        int64
-    QuoteVolume      float64
-    NumTrades        int64
-    TakerBaseVolume  float64
-    TakerQuoteVolume float64
-}
-
-type ChangeStats struct {
-    PriceChange        float64 `json:"priceChange,string"`
-    PriceChangePercent float64 `json:"priceChangePercent,string"`
-    WeightedAvgPrice   float64 `json:"weightedAvgPrice,string"`
-    PrevClosePrice     float64 `json:"prevClosePrice,string"`
-    LastPrice          float64 `json:"lastPrice,string"`
-    BidPrice           float64 `json:"bidPrice,string"`
-    AskPrice           float64 `json:"askPrice,string"`
-    OpenPrice          float64 `json:"openPrice,string"`
-    HighPrice          float64 `json:"highPrice,string"`
-    LowPrice           float64 `json:"lowPrice,string"`
-    Volume             float64 `json:"volume,string"`
-    OpenTime           int64   `json:"openTime"`
-    CloseTime          int64   `json:"closeTime"`
-    FirstId            int64   `json:"firstId"`
-    LastId             int64   `json:"lastId"`
-    Count              int64   `json:"count"`
-
-}
-
-type TickerPrice struct {
-    Symbol string  `json:"symbol"`
-    Price  float64 `json:"price,string"`
-}
-
-type BookTicker struct {
-    Symbol      string  `json:"symbol"`
-    BidPrice    float64 `json:"bidPrice,string"`
-    BidQuantity float64 `json:"bidQuantity,string"`
-    AskPrice    float64 `json:"askPrice,string"`
-    AskQuantity float64 `json:"askQuantity,string"`
-}
-
 //
 // Get order book
 func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
@@ -107,9 +49,10 @@ func (o *Order) UnmarshalJSON(b []byte) error {
 
 
 // Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
-func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
+func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
 
-    reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", symbol)
+    err = q.ValidateSymbolQuery()
+    reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", q.Symbol)
 
     _, err = b.client.do("GET", reqUrl, "", false, &trades)
     return
@@ -117,9 +60,10 @@ func (b *Binance) GetAggTrades(symbol string) (trades []AggTrade, err error) {
 
 //
 // Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
-func (b *Binance) GetKlines(symbol, interval string) (klines []Kline, err error) {
+func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
 
-    reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", symbol, interval)
+    err = q.ValidateKlineQuery()
+    reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", q.Symbol, q.Interval)
 
     _, err = b.client.do("GET", reqUrl, "", false, &klines)
     return
@@ -186,9 +130,10 @@ func (k *Kline) UnmarshalJSON(b []byte) error {
 
 //
 // 24 hour price change statistics.
-func (b *Binance) Get24Hr(symbol string) (changeStats ChangeStats, err error) {
+func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 
-    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", symbol)
+    err = q.ValidateSymbolQuery()
+    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", q.Symbol)
 
     _, err = b.client.do("GET", reqUrl, "", false, &changeStats)
     return
