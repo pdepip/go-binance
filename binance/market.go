@@ -10,7 +10,9 @@ package binance
 
 import (
     "fmt"
+    //"errors"
     "strconv"
+    "net/http"
     "encoding/json"
 )
 
@@ -77,7 +79,13 @@ func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
 
     reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", q.Symbol, q.Interval)
 
-    _, err = b.client.do("GET", reqUrl, "", false, &klines)
+    var res *http.Response
+    res, err = b.client.do("GET", reqUrl, "", false, &klines)
+    if err != nil {
+        fmt.Println("err getting klines", err, res)
+        return
+    }
+
     return
 }
 
@@ -85,11 +93,7 @@ func (k *Kline) UnmarshalJSON(b []byte) error {
     var s [11]interface{}
 
     err := json.Unmarshal(b, &s)
-    if err != nil {
-        return err
-    }
 
-    fmt.Println(s)
     k.OpenTime = int64(s[0].(float64))
 
     k.Open, err = strconv.ParseFloat(s[1].(string), 64)

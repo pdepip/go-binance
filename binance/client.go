@@ -16,7 +16,7 @@ import (
     "time"
     "errors"
     "strings"
-    //"io/ioutil"
+    "io/ioutil"
     "net/http"
     "crypto/hmac"
     "crypto/sha256"
@@ -30,6 +30,31 @@ type Client struct {
     httpClient *http.Client
 }
 
+type BadRequest struct {
+    code int64  `json:"code"`
+    msg  string `json:"msg,required"`
+
+}
+
+
+func handleError(resp *http.Response) error {
+
+    if resp.StatusCode == 400 {
+
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            fmt.Println("ERR READALL", err)
+        }
+
+        errorText := fmt.Sprintf("Bad Request: %s", string(body))
+        return errors.New(errorText)
+    } else {
+        return nil
+    }
+
+}
+
+
 // Creates a new Binance HTTP Client
 func NewClient(key, secret string) (c *Client) {
     client := &Client{
@@ -40,7 +65,7 @@ func NewClient(key, secret string) (c *Client) {
     return client
 }
 
-func (c *Client) do(method, resource, payload string, auth bool, result interface{}) (res *http.Response, err error) {
+func (c *Client) do(method, resource, payload string, auth bool, result interface{}) (resp *http.Response, err error) {
 
     fullUrl := fmt.Sprintf("%s/%s", BaseUrl, resource)
 
@@ -76,20 +101,25 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
         //fmt.Println(req.URL)
     }   
 
-    resp, err := c.httpClient.Do(req)
+    resp, err = c.httpClient.Do(req)
     if err != nil {
         return
     }
-    defer resp.Body.Close()
+    //defer resp.Body.Close()
+
+    err = handleError(resp)
+    if err != nil {
+        return
+    }
+
     /*
-    body, err := ioutil.ReadAll(resp.Body)
+    body, err := ioutil.ReadAll(resp)
     bodyString := string(body)
     fmt.Println(bodyString)
     */
     if resp != nil {
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)
-        return
     }
     return
 }

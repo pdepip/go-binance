@@ -4,12 +4,12 @@ import (
     "testing"
     "go-binance/binance"
 )
-/*
+
 func TestGetOrderBook(t *testing.T) {
 
     // Params
     query := binance.OrderBookQuery {
-        Symbol: "BNBBTC",
+        Symbol: "BNBIBTC",
         Limit: 100,
     }
 
@@ -22,7 +22,7 @@ func TestGetOrderBook(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-
+/*
 func TestGetAggTrades(t *testing.T) {
 
     // Params
@@ -38,23 +38,24 @@ func TestGetAggTrades(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-*/
+
 func TestGetKlines(t *testing.T) {
 
     // Params
     query := binance.KlineQuery {
-        Symbol: "BNBBTC",
+        Symbol: "BNBdBTC",
         Interval: "12h",
     }
 
     client := binance.New("", "")
-    res, err := client.GetKlines(query)
+    _, err := client.GetKlines(query)
     if err != nil {
         t.Fatal(err)
     }
 
-    t.Logf("%+v\n", res)
+    //t.Logf("%+v\n", res)
 }
+
 /*
 func TestGet24Hr(t *testing.T) {
 
@@ -71,7 +72,7 @@ func TestGet24Hr(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-
+/*
 func TestGetAllPrices(t *testing.T) {
 
     client := binance.New("", "")

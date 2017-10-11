@@ -11,6 +11,7 @@ type OrderBook struct {
     LastUpdatedId int64 `json:"lastUpdatedId"`
     Bids []Order `json:"bids"`
     Asks []Order `json:"asks"`
+    //Msg  string  `json:"msg"`
 }
 
 type Order struct {
@@ -37,6 +38,7 @@ type ChangeStats struct {
     FirstId            int64   `json:"firstId"`
     LastId             int64   `json:"lastId"`
     Count              int64   `json:"count"`
+    Msg                string  `json:"msg"`
 }
 
 
@@ -50,6 +52,7 @@ type AggTrade struct {
     Timestamp    int64   `json:"T"`
     Maker        bool    `json:"m"`
     BestMatch    bool    `json:"M"`
+    Msg          string  `json:"msg"`
 }
 
 
@@ -57,6 +60,7 @@ type AggTrade struct {
 type TickerPrice struct {
     Symbol string  `json:"symbol"`
     Price  float64 `json:"price,string"`
+    Msg    string  `json:"msg"`
 }
 
 
@@ -67,11 +71,13 @@ type BookTicker struct {
     BidQuantity float64 `json:"bidQuantity,string"`
     AskPrice    float64 `json:"askPrice,string"`
     AskQuantity float64 `json:"askQuantity,string"`
+    Msg         string  `json:"msg"`
 }
 
 
 // Result from: GET /api/v1/klines
-type Kline struct{
+
+type Kline struct {
     OpenTime         int64 
     Open             float64
     High             float64
@@ -83,4 +89,5 @@ type Kline struct{
     NumTrades        int64
     TakerBaseVolume  float64
     TakerQuoteVolume float64
+    Msg              string
 }
