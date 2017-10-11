@@ -20,9 +20,13 @@ import (
 func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
 
     err = q.ValidateOrderBookQuery()
-    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", q.Symbol, q.Limit)
+    if err != nil {
+        return
+    }
 
+    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", q.Symbol, q.Limit)
     _, err = b.client.do("GET", reqUrl, "", false, &book)
+
     return
 }
 
@@ -52,6 +56,10 @@ func (o *Order) UnmarshalJSON(b []byte) error {
 func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
 
     err = q.ValidateSymbolQuery()
+    if err != nil {
+        return
+    }
+
     reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", q.Symbol)
 
     _, err = b.client.do("GET", reqUrl, "", false, &trades)
@@ -63,6 +71,10 @@ func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
 func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
 
     err = q.ValidateKlineQuery()
+    if err != nil {
+        return
+    }
+
     reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", q.Symbol, q.Interval)
 
     _, err = b.client.do("GET", reqUrl, "", false, &klines)
@@ -133,9 +145,13 @@ func (k *Kline) UnmarshalJSON(b []byte) error {
 func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 
     err = q.ValidateSymbolQuery()
-    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", q.Symbol)
+    if err != nil {
+        return
+    }
 
+    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", q.Symbol)
     _, err = b.client.do("GET", reqUrl, "", false, &changeStats)
+
     return
 }
 
@@ -144,8 +160,8 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 
     reqUrl := "v1/ticker/allPrices"
-
     _, err = b.client.do("GET", reqUrl, "", false, &prices)
+
     return
 }
 
@@ -154,8 +170,8 @@ func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
 
     reqUrl := "v1/ticker/allBookTickers"
-
     _, err = b.client.do("GET", reqUrl, "", false, &booktickers)
+
     return
 }
 
