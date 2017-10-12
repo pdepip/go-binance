@@ -7,7 +7,7 @@ import (
     "go-binance/binance"
 )
 
-/*
+
 func TestGetPositions(t *testing.T) {
 
     binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
@@ -44,7 +44,7 @@ func TestLimitOrder(t *testing.T) {
 
 }
 
-/*
+
 func TestMarketOrder(t *testing.T) {
 
     // Params
@@ -65,8 +65,8 @@ func TestMarketOrder(t *testing.T) {
     t.Logf("%+v\n", res.OrderId)
 
 }
-*/
-/*
+
+
 func TestQueryOrder(t *testing.T) {
 
     // Order Param
@@ -81,7 +81,9 @@ func TestQueryOrder(t *testing.T) {
 
     client := binance.New(os.Getenv("key"), os.Getenv("secret"))
     res, err := client.PlaceLimitOrder(order)
-    t.Logf("%+v\n", res)
+    if err != nil {
+        t.Fatal(err)
+    }
 
     // Query Param
     query := binance.OrderQuery{
@@ -97,7 +99,6 @@ func TestQueryOrder(t *testing.T) {
 
     t.Logf("%+v\n", status)
 }
-*/
 
 func TestCancelOrder(t *testing.T) {
 
@@ -113,7 +114,9 @@ func TestCancelOrder(t *testing.T) {
 
     client := binance.New(os.Getenv("key"), os.Getenv("secret"))
     res, err := client.PlaceLimitOrder(order)
-    t.Logf("%+v\n", res)
+    if err != nil {
+        t.Fatal(err)
+    }
 
     // Cancel Param
     query := binance.OrderQuery {
@@ -145,3 +148,4 @@ func TestGetOpenOrders(t *testing.T) {
 
     t.Logf("%+v\n", openOrders)
 }
+

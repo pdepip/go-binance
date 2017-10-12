@@ -43,7 +43,7 @@ func handleError(resp *http.Response) error {
 
         body, err := ioutil.ReadAll(resp.Body)
         if err != nil {
-            fmt.Println("ERR READALL", err)
+            return err
         }
 
         errorText := fmt.Sprintf("Bad Request: %s", string(body))
@@ -105,18 +105,13 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
     if err != nil {
         return
     }
-    //defer resp.Body.Close()
 
     err = handleError(resp)
+    defer resp.Body.Close()
     if err != nil {
         return
     }
 
-    /*
-    body, err := ioutil.ReadAll(resp)
-    bodyString := string(body)
-    fmt.Println(bodyString)
-    */
     if resp != nil {
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)

@@ -9,7 +9,7 @@ func TestGetOrderBook(t *testing.T) {
 
     // Params
     query := binance.OrderBookQuery {
-        Symbol: "BNBIBTC",
+        Symbol: "BNBBTC",
         Limit: 100,
     }
 
@@ -22,7 +22,7 @@ func TestGetOrderBook(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-/*
+
 func TestGetAggTrades(t *testing.T) {
 
     // Params
@@ -43,20 +43,19 @@ func TestGetKlines(t *testing.T) {
 
     // Params
     query := binance.KlineQuery {
-        Symbol: "BNBdBTC",
+        Symbol: "BNBBTC",
         Interval: "12h",
     }
 
     client := binance.New("", "")
-    _, err := client.GetKlines(query)
+    res, err := client.GetKlines(query)
     if err != nil {
         t.Fatal(err)
     }
 
-    //t.Logf("%+v\n", res)
+    t.Logf("%+v\n", res)
 }
 
-/*
 func TestGet24Hr(t *testing.T) {
 
     //Params
@@ -72,7 +71,7 @@ func TestGet24Hr(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-/*
+
 func TestGetAllPrices(t *testing.T) {
 
     client := binance.New("", "")
@@ -94,4 +93,3 @@ func TestGetBookTickers(t *testing.T) {
 
     t.Logf("%+v\n", res)
 }
-*/

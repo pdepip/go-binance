@@ -1,23 +1,18 @@
 /*
+
     market.go
         Market Data Endpoints for the Binance Exchange API
 
-    To Do:
-        1. Document Functions
-        2. Optional Parameters
 */
 package binance
 
 import (
     "fmt"
-    //"errors"
     "strconv"
-    "net/http"
     "encoding/json"
 )
 
 
-//
 // Get order book
 func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
 
@@ -79,10 +74,8 @@ func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
 
     reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", q.Symbol, q.Interval)
 
-    var res *http.Response
-    res, err = b.client.do("GET", reqUrl, "", false, &klines)
+    _, err = b.client.do("GET", reqUrl, "", false, &klines)
     if err != nil {
-        fmt.Println("err getting klines", err, res)
         return
     }
 

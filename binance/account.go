@@ -1,6 +1,8 @@
 /*
+
     account.go
-        Account Endpoints for Binance Exchange API
+        Account (Signed) Endpoints for Binance Exchange API
+
 */
 package binance
 
