@@ -127,14 +127,14 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 
 
 // Retrieve All Open Orders
-func (b *Binance) GetOpenOrders(q OpenOrdersQuery) (orders []OrderStatus, err error) {
+func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, err error) {
 
-    err = q.ValidateOpenOrdersQuery()
+    err = query.ValidateOpenOrdersQuery()
     if err != nil {
         return
     }
 
-    reqUrl := fmt.Sprintf("v3/openOrders?symbol=%s&recvWindow=%d", q.Symbol, q.RecvWindow)
+    reqUrl := fmt.Sprintf("v3/openOrders?symbol=%s&recvWindow=%d", query.Symbol, query.RecvWindow)
  
     _, err = b.client.do("GET", reqUrl, "", true, &orders)
     if err != nil {

@@ -2,7 +2,6 @@ package account_test
 
 import (
     "os"
-    //"fmt"
     "testing"
     "go-binance/binance"
 )
@@ -20,6 +19,10 @@ func TestGetPositions(t *testing.T) {
     t.Logf("%+v\n", positions)
 }
 
+
+/*
+
+    THE FOLLOWING TESTS WILL PLACE ACTUAL ORDERS ON THE BINANCE EXCHANGE
 
 func TestLimitOrder(t *testing.T) {
 
@@ -132,6 +135,7 @@ func TestCancelOrder(t *testing.T) {
 
     t.Logf("%+v\n", canceledOrder)
 }
+*/
 
 func TestGetOpenOrders(t *testing.T) {
 

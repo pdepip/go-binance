@@ -1,13 +1,6 @@
 /*
     client.go
         Wrapper for the Binance Exchange API
-
-    Authors:
-        Pat DePippo  <patrick.depippo@dcrypt.io>
-        Matthew Woop <matthew.woop@dcrypt.io>
-
-    To Do:
-
 */
 package binance
 
@@ -33,7 +26,6 @@ type Client struct {
 type BadRequest struct {
     code int64  `json:"code"`
     msg  string `json:"msg,required"`
-
 }
 
 
@@ -98,7 +90,6 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
 
         signature := hex.EncodeToString(mac.Sum(nil))
         req.URL.RawQuery = q.Encode() + "&signature=" + signature
-        //fmt.Println(req.URL)
     }   
 
     resp, err = c.httpClient.Do(req)
@@ -106,12 +97,14 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
         return
     }
 
+    // Check for error
     err = handleError(resp)
     defer resp.Body.Close()
     if err != nil {
         return
     }
 
+    // Process response
     if resp != nil {
         decoder := json.NewDecoder(resp.Body)
         err = decoder.Decode(result)
