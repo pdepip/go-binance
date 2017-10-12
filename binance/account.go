@@ -11,6 +11,7 @@ import (
 )
 
 
+// Get Basic Account Information
 func (b *Binance) GetAccountInfo() (account Account, err error) {
 
     reqUrl := fmt.Sprintf("v3/account")
@@ -24,6 +25,7 @@ func (b *Binance) GetAccountInfo() (account Account, err error) {
 }
 
 
+// Filter Basic Account Information To Retrieve Current Holdings
 func (b *Binance) GetPositions() (positions []Balance, err error) {
 
     reqUrl := fmt.Sprintf("v3/account")
@@ -48,7 +50,7 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
 }
 
 
-
+// Place a Limit Order
 func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 
     err = l.ValidateLimitOrder()
@@ -67,6 +69,7 @@ func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 }
 
 
+// Place a Market Order
 func (b *Binance) PlaceMarketOrder(m MarketOrder) (res PlacedOrder, err error) {
 
     err = m.ValidateMarketOrder()
@@ -85,6 +88,7 @@ func (b *Binance) PlaceMarketOrder(m MarketOrder) (res PlacedOrder, err error) {
 }
 
 
+// Cancel an Order
 func (b *Binance) CancelOrder(query OrderQuery) (order CanceledOrder, err error) {
 
     err = query.ValidateOrderQuery()
@@ -103,6 +107,7 @@ func (b *Binance) CancelOrder(query OrderQuery) (order CanceledOrder, err error)
 }
 
 
+// Check the Status of an Order
 func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 
     err = query.ValidateOrderQuery()
@@ -121,6 +126,7 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 }
 
 
+// Retrieve All Open Orders
 func (b *Binance) GetOpenOrders(q OpenOrdersQuery) (orders []OrderStatus, err error) {
 
     err = q.ValidateOpenOrdersQuery()

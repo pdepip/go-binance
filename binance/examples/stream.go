@@ -1,3 +1,9 @@
+/*
+
+    Connects to the Binance WebSocket and holds a symbol's OrderBook in memory
+
+*/
+
 package main
 
 import (
