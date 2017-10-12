@@ -46,8 +46,8 @@ import (
 
 func main() {
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
-    positions, err := binance.GetPositions()
+    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    positions, err := client.GetPositions()
 
     if err != nil {
         panic(err)
@@ -59,99 +59,67 @@ func main() {
 }
 ```
 
-Get Latest Ticker Price
+Place a Limit Order
 
 ```go
-import fmt
+package main
 
-pair := "BTC-BNB"
+import (
+	"os"
+	"fmt"
+	"go-binance/binance"
+)
 
-price, err := binance.GetTicker(pair)
+func main() {
+    // Params
+    order := binance.LimitOrder {
+        Symbol:      "BNBBTC",
+        Side:        "BUY",
+        Type:        "LIMIT",
+        TimeInForce: "GTC",
+        Quantity:    50.0,
+        Price:       0.00025,
+    }
 
-if err != nil {
-	panic(err)
+    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    res, err := client.PlaceLimitOrder(order)
+    
+    if err != nil {
+    	panic(err)
+    }
+    
+    fmt.Println(res)
 }
-
-fmt.println(pair, price)
 ```
 
-Place A Limit Order
+Get the Order Book
 
 ```go
-import fmt
+import (
+	"fmt"
+	"go-binance/binance"
+)
 
-orderId, err := binance.BuyLimit("BTC-BNB", 50, "0.00038588")
+func main() {
 
-if err != nil {
-    panic(err)
+    // Params
+    query := binance.OrderBookQuery {
+        Symbol: "BNBBTC",
+        Limit: 100,
+    }
+
+    client := binance.New("", "")
+    res, err := client.GetOrderBook(query)
+
+    if err != nil {
+        panic(err)
+    }
+    
+    fmt.Println(res)
+
 }
-
-fmt.println(orderId)
 ```
 
-Place A Market Order
+### Local Depth Cache
 
-```go
-import fmt
-
-orderId, err := binance.BuyMarket("BTC-BNB", 50)
-
-if err != nil {
-    panic(err)
-}
-
-fmt.println(orderId)
-```
-
-Checking Order Status
-
-```go
-import fmt
-
-status, err := binance.CheckOrder("gd87xs6jx00v")
-
-if err != nil {
-    panic(err)
-}
-
-fmt.println(status)
-```
-
-Cancel An Order
-
-```go
-import fmt
-
-status, err := binance.CancelOrder("BNBBTC", orderId)
-
-if err != nil {
-    panic(err)
-}
-
-fmt.println(status)
-```
-
-Get Open Orders
-
-```go
-import fmt
-
-orders, err = binance.OpenOrders("BNBBTC")
-
-if err != nil {
-    panic(nil)
-}
-
-for _, o := range orders {
-    fmt.println(order)
-}
-
-```
-
-Get Ticker Depth
-
-```go
-import fmt
-
-
-```
+See `examples/stream.go`
