@@ -1,10 +1,16 @@
 /*
 
-    Stores response structs for API functions in market.go
+    market_response.go
+        Stores response structs/handlers for API functions in market.go
 
 */
 
 package binance
+
+import (
+    "strconv"
+    "encoding/json"
+)
 
 // Result from: GET /api/v1/depth
 type OrderBook struct {
@@ -16,6 +22,28 @@ type OrderBook struct {
 type Order struct {
     Price    float64 `json:",string"`
     Quantity float64 `json:",string"`
+}
+
+// Custom Unmarshal function to handle response data format
+func (o *Order) UnmarshalJSON(b []byte) error {
+    var s [2]string
+
+    err := json.Unmarshal(b, &s)
+    if err != nil {
+        return err
+    }
+
+    o.Price, err = strconv.ParseFloat(s[0], 64)
+    if err != nil {
+        return err
+    }
+
+    o.Quantity, err = strconv.ParseFloat(s[1], 64)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }
 
 
@@ -84,4 +112,60 @@ type Kline struct {
     NumTrades        int64
     TakerBaseVolume  float64
     TakerQuoteVolume float64
+}
+
+// Custom Unmarshal function to handle response data format
+func (k *Kline) UnmarshalJSON(b []byte) error {
+    var s [11]interface{}
+
+    err := json.Unmarshal(b, &s)
+
+    k.OpenTime = int64(s[0].(float64))
+
+    k.Open, err = strconv.ParseFloat(s[1].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.High, err = strconv.ParseFloat(s[2].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.Low, err = strconv.ParseFloat(s[3].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.Close, err = strconv.ParseFloat(s[4].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.Volume, err = strconv.ParseFloat(s[5].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.CloseTime = int64(s[6].(float64))
+
+
+    k.QuoteVolume, err = strconv.ParseFloat(s[7].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.NumTrades = int64(s[8].(float64))
+
+    k.TakerBaseVolume, err = strconv.ParseFloat(s[9].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    k.TakerQuoteVolume, err = strconv.ParseFloat(s[10].(string), 64)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }
