@@ -2,7 +2,6 @@ package main
 
 import (
     "sync"
-    "sort"
     "strings"
     "log"
     "fmt"
@@ -69,36 +68,10 @@ func (o *OrderBook) Maintainer() {
             if len(job.AskDelta) > 0 {
                 go o.ProcessAsks(job.AskDelta)
             }
-            o.DisplayBook()
         }
     }   
 }
 
-func (o *OrderBook) DisplayBook() {
-
-    o.BidMutex.Lock()
-    o.AskMutex.Lock()
-    var bidPrices []float64
-    var askPrices []float64
-
-    for k := range o.Bids {
-        bidPrices = append(bidPrices, k)
-    }
-    
-    for k := range o.Asks {
-        askPrices = append(askPrices, k)
-    }
-
-    sort.Float64s(bidPrices)
-    sort.Float64s(askPrices)
-
-    fmt.Println("BIDS:", o.Bids)
-    fmt.Println("ASKS:", o.Asks)
-    fmt.Println("")
-
-    o.BidMutex.Unlock()
-    o.AskMutex.Unlock()
-}
 
 func main() {
 
