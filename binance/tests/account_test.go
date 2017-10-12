@@ -9,7 +9,7 @@ import (
 
 func TestGetPositions(t *testing.T) {
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     positions, err := binance.GetPositions()
 
     if err != nil {
@@ -36,7 +36,7 @@ func TestLimitOrder(t *testing.T) {
         Price:       0.00025,
     }
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     res, err := binance.PlaceLimitOrder(order)
     
     if err != nil {
@@ -58,7 +58,7 @@ func TestMarketOrder(t *testing.T) {
         Quantity:    10.0,
     }
 
-    binance := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     res, err := binance.PlaceMarketOrder(order)
     
     if err != nil {
@@ -82,7 +82,7 @@ func TestQueryOrder(t *testing.T) {
         Price:       0.00025,
     }
 
-    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     res, err := client.PlaceLimitOrder(order)
     if err != nil {
         t.Fatal(err)
@@ -115,7 +115,7 @@ func TestCancelOrder(t *testing.T) {
         Price:       0.00025,
     }
 
-    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     res, err := client.PlaceLimitOrder(order)
     if err != nil {
         t.Fatal(err)
@@ -144,7 +144,7 @@ func TestGetOpenOrders(t *testing.T) {
         Symbol: "BNBBTC",
     }
 
-    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     openOrders, err := client.GetOpenOrders(query)
     if err != nil {
         t.Fatal(err)

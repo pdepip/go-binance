@@ -45,7 +45,7 @@ import (
 
 func main() {
 
-    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     positions, err := client.GetPositions()
 
     if err != nil {
@@ -80,7 +80,7 @@ func main() {
         Price:       0.00025,
     }
 
-    client := binance.New(os.Getenv("key"), os.Getenv("secret"))
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
     res, err := client.PlaceLimitOrder(order)
     
     if err != nil {
