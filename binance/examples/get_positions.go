@@ -1,6 +1,7 @@
 /*
 
-    Example script showing how to call GetPositions
+    get_positions.go
+        Example script showing how to call route: /api/v3/account
 
 */
 

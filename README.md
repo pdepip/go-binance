@@ -7,8 +7,7 @@ Go client for [Binance](https://www.binance.com)
 ```go get https://github.com/pdepip/go-binance.git```
 
 ## Documentation
-
-Full documentation can be found in the [GoDoc]() documentation
+Full API Documentation can be found at https://www.binance.com/restapipub.html
 
 ### Setup
 
@@ -17,7 +16,7 @@ Creating a client:
 ```go
 import (
 	"os"
-	"binance"
+	"go-binance/binance"
 )
 
 // Secure method
@@ -122,4 +121,4 @@ func main() {
 
 ### Local Depth Cache
 
-See `examples/stream.go`
+See `examples/depth.go`. Script connects to Binance websocket and maintains a simple local depth cache.

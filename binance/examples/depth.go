@@ -1,6 +1,7 @@
 /*
-
-    Connects to the Binance WebSocket and holds a symbol's OrderBook in memory
+    depth.go
+        Connects to the Binance WebSocket and maintains
+        local depth cache.
 
 */
 
@@ -17,28 +18,34 @@ import (
 )
 
 const (
-    MaxDepth = 500 // Size of order book
-    MaxQueue = 500 // Size of message queue
+    MaxDepth = 100 // Size of order book
+    MaxQueue = 100 // Size of message queue
 )
 
+// Message received from websocket
 type State struct {
-    EventType string `json:"e"`
-    EventTime int64  `json:"E"`
-    Symbol    string `json:"s"`
-    UpdateId  int64  `json:"u"`
+    EventType string           `json:"e"`
+    EventTime int64            `json:"E"`
+    Symbol    string           `json:"s"`
+    UpdateId  int64            `json:"u"`
     BidDelta  []binance.Order  `json:"b"`
     AskDelta  []binance.Order  `json:"a"`
 }
 
-type OrderBook struct {
-    Bids map[float64]float64
-    BidMutex sync.Mutex
 
-    Asks map[float64]float64
-    AskMutex sync.Mutex
-    Updates chan State
+// Orderbook structure
+type OrderBook struct {
+    Bids map[float64]float64 // Map of all bids, key->price, value->quantity
+    BidMutex sync.Mutex      // Threadsafe
+
+    Asks map[float64]float64 // Map of all asks, key->price, value->quantity
+    AskMutex sync.Mutex      // Threadsafe
+
+    Updates chan State       // Channel of all state updates
 }
 
+
+// Process all incoming bids
 func (o *OrderBook) ProcessBids(bids []binance.Order) {
     for _, bid := range bids {
         o.BidMutex.Lock()
@@ -51,6 +58,8 @@ func (o *OrderBook) ProcessBids(bids []binance.Order) {
     }
 }
 
+
+// Process all incoming asks
 func (o *OrderBook) ProcessAsks(asks []binance.Order) {
     for _, ask := range asks {
         o.AskMutex.Lock()
@@ -63,6 +72,8 @@ func (o *OrderBook) ProcessAsks(asks []binance.Order) {
     }
 }
 
+
+// Hands off incoming messages to processing functions
 func (o *OrderBook) Maintainer() {
     for {
         select {
@@ -81,12 +92,11 @@ func (o *OrderBook) Maintainer() {
 
 func main() {
 
-    var wsDialer websocket.Dialer
-
     symbol := "ethbtc"
-
     address := fmt.Sprintf("wss://stream.binance.com:9443/ws/%s@depth", symbol)
 
+    // Connect to websocket
+    var wsDialer websocket.Dialer
     wsConn, _, err := wsDialer.Dial(address, nil)
     if err != nil {
         panic(err)
@@ -94,12 +104,13 @@ func main() {
     defer wsConn.Close()
     log.Println("Dialed:", address)
 
+    // Set up Order Book
     ob := OrderBook{} 
     ob.Bids = make(map[float64]float64, MaxDepth)
     ob.Asks = make(map[float64]float64, MaxDepth)
-
     ob.Updates = make(chan State, 500)
 
+    // Get initial state of orderbook from rest api
     client := binance.New("", "")
     query := binance.OrderBookQuery {
         Symbol: strings.ToUpper(symbol),
@@ -108,12 +119,13 @@ func main() {
     if err != nil {
         panic(err)
     }
-
     ob.ProcessBids(orderBook.Bids)
     ob.ProcessAsks(orderBook.Asks)
 
+    // Start maintaining order book
     go ob.Maintainer()
 
+    // Read & Process Messages from wss stream
     for {
         _, message, err := wsConn.ReadMessage()
         if err != nil {
@@ -131,5 +143,3 @@ func main() {
     }
 
 }
-
-
