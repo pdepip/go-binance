@@ -15,18 +15,16 @@ import (
 
 func main() {
 
-    query := binance.SymbolQuery {
-        Symbol: "BNBBTC",
-    }
-
     client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-    price, err := client.GetLastPrice(query)
+    positions, err := client.GetLastPrice()
 
     if err != nil {
         panic(err)
     }
 
-    fmt.Println(price)
+    for _, p := range positions {
+        fmt.Println(p.Asset, p.Free, p.Locked)
+    }
 
 }
 
