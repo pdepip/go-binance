@@ -76,10 +76,17 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 
 
 // Latest price for all symbols.
-func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
+func (b *Binance) GetAllPrices(q SymbolQuery) (prices []TickerPrice, err error) {
+
+    err = q.ValidateSymbolQuery()
+    if err != nil {
+        return
+    }
 
     reqUrl := "v1/ticker/allPrices"
     _, err = b.client.do("GET", reqUrl, "", false, &prices)
+
+    fmt.Println(prices)
 
     return
 }

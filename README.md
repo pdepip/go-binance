@@ -91,6 +91,119 @@ func main() {
 }
 ```
 
+Place a Market Order
+
+```go
+package main
+
+import (
+	"os"
+	"fmt"
+	"go-binance/binance"
+)
+
+func main() {
+    // Params
+    order := binance.MarketOrder {
+        Symbol:   "BNBBTC",
+        Side:     "BUY",
+        Type:     "MARKET",
+        Quantity: 50.0,
+    }
+
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.PlaceMarketOrder(order)
+    
+    if err != nil {
+    	panic(err)
+    }
+    
+    fmt.Println(res)
+}
+```
+
+Check Order Status
+
+```go
+import (
+	"os"
+	"fmt"
+	"go-binance/binance"
+)
+
+func main() {
+    // Params
+    orderQuery := binance.OrderQuery {
+        Symbol:  "BNBBTC",
+        OrderId: "yourOrderId",
+    }
+
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.CheckOrder(orderQuery)
+    
+    if err != nil {
+    	panic(err)
+    }
+    
+    fmt.Println(res)
+}
+```
+
+Cancel an Order
+
+```go
+import (
+	"os"
+	"fmt"
+	"go-binance/binance"
+)
+
+func main() {
+    // Params
+    orderQuery := binance.OrderQuery {
+        Symbol:  "BNBBTC",
+        OrderId: "yourOrderId",
+    }
+
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.CancelOrder(orderQuery)
+    
+    if err != nil {
+    	panic(err)
+    }
+    
+    fmt.Println(res)
+}
+```
+
+Get Open Orders
+
+```go
+
+import (
+	"os"
+	"fmt"
+	"go-binance/binance"
+)
+
+func main() {
+    // Params
+    orderQuery := binance.OpenOrdersQuery {
+        Symbol: "BNBBTC",
+    }
+
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.GetOpenOrders(orderQuery)
+    
+    if err != nil {
+    	panic(err)
+    }
+    
+    fmt.Println(res)
+}
+
+```
+
 Get the Order Book
 
 ```go
@@ -118,6 +231,8 @@ func main() {
 
 }
 ```
+
+
 
 ### Local Depth Cache
 
