@@ -232,7 +232,32 @@ func main() {
 }
 ```
 
+Get Latest Price of a Symbol
 
+```go
+import (
+	"fmt"
+	"go-binance/binance"
+)
+
+func main() {
+
+    // Params
+    query := binance.SymbolQuery {
+        Symbol: "BNBBTC",
+    }
+
+    client := binance.New("", "")
+    res, err := client.GetLastPrice(query)
+
+    if err != nil {
+        panic(err)
+    }
+    
+    fmt.Println(res)
+
+}
+```
 
 ### Local Depth Cache
 

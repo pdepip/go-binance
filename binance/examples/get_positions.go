@@ -16,7 +16,7 @@ import (
 func main() {
 
     client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-    positions, err := client.GetLastPrice()
+    positions, err := client.GetPositions()
 
     if err != nil {
         panic(err)
