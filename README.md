@@ -9,7 +9,7 @@ Go client for [Binance](https://www.binance.com)
 ## Documentation
 Full API Documentation can be found at https://www.binance.com/restapipub.html
 
-### Setup
+## Setup
 
 Creating a client:
 
@@ -30,9 +30,9 @@ key    := "myKey"
 client :=  binance.New(secret, key)
 ```
 
-### Examples
+## Examples
 
-Get Current Positions
+### Get Current Positions
 
 ```go
 package main
@@ -58,7 +58,7 @@ func main() {
 }
 ```
 
-Place a Limit Order
+### Place a Limit Order
 
 ```go
 package main
@@ -91,7 +91,7 @@ func main() {
 }
 ```
 
-Place a Market Order
+### Place a Market Order
 
 ```go
 package main
@@ -122,7 +122,7 @@ func main() {
 }
 ```
 
-Check Order Status
+### Check Order Status
 
 ```go
 import (
@@ -149,7 +149,7 @@ func main() {
 }
 ```
 
-Cancel an Order
+### Cancel an Order
 
 ```go
 import (
@@ -176,7 +176,7 @@ func main() {
 }
 ```
 
-Get Open Orders
+### Get Open Orders
 
 ```go
 
@@ -204,7 +204,7 @@ func main() {
 
 ```
 
-Get the Order Book
+### Get the Order Book
 
 ```go
 import (
@@ -232,7 +232,7 @@ func main() {
 }
 ```
 
-Get Latest Price of a Symbol
+### Get Latest Price of a Symbol
 
 ```go
 import (
