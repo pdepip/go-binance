@@ -25,5 +25,6 @@ func main() {
     for _, p := range positions {
         fmt.Println(p.Asset, p.Free, p.Locked)
     }
+
 }
 

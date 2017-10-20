@@ -85,6 +85,30 @@ func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 }
 
 
+// Latest price for an individual symbol
+func (b *Binance) GetLastPrice(q SymbolQuery) (price TickerPrice, err error) {
+
+    err = q.ValidateSymbolQuery()
+    if err != nil {
+        return
+    }
+
+    var prices []TickerPrice
+    prices, err = b.GetAllPrices()
+    if err != nil {
+        return
+    }
+
+    for _, p := range prices {
+        if p.Symbol == q.Symbol {
+            return p, nil
+        }
+    }
+
+    return
+}
+
+
 // Best price/qty on the order book for all symbols.
 func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
 

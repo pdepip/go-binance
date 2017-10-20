@@ -36,8 +36,8 @@ func TestLimitOrder(t *testing.T) {
         Price:       0.00025,
     }
 
-    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-    res, err := binance.PlaceLimitOrder(order)
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.PlaceLimitOrder(order)
     
     if err != nil {
         t.Fatal(err)
@@ -58,8 +58,8 @@ func TestMarketOrder(t *testing.T) {
         Quantity:    10.0,
     }
 
-    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-    res, err := binance.PlaceMarketOrder(order)
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    res, err := client.PlaceMarketOrder(order)
     
     if err != nil {
         t.Fatal(err)
