@@ -60,3 +60,17 @@ type OrderStatus struct {
     IcebergQty    float64 `json:"icebergQty,string"`
     Time          int64   `json:"time"`
 }
+
+// Result from: GET /api/v3/myTrades
+type Trade struct {
+    Id              int64   `json:"id"`
+    Price           float64 `json:"price,string"`
+    Quantity        float64 `json:"qty,string"`
+    Commission      float64 `json:"commission,string"`
+    CommissionAsset string  `json:"commissionAsset"`
+    Time            int64   `json:"time"`
+    isBuyer         bool    `json:"isBusyer"`
+    isMaker         bool    `json:"isMaker"`
+    isBestMatch     bool    `json:"isBestMatch"`
+}
+

@@ -3,9 +3,23 @@ package account_test
 import (
     "os"
     "testing"
-    "go-binance/binance"
+    "github.com/pdepip/go-binance/binance"
 )
 
+
+func TestGetTrades(t *testing.T) {
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    trades, err := client.GetTrades("BNBETH")
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", trades)
+}
+
+/*
 
 func TestGetPositions(t *testing.T) {
 
@@ -20,7 +34,6 @@ func TestGetPositions(t *testing.T) {
 }
 
 
-/*
 
     THE FOLLOWING TESTS WILL PLACE ACTUAL ORDERS ON THE BINANCE EXCHANGE
 
@@ -135,7 +148,7 @@ func TestCancelOrder(t *testing.T) {
 
     t.Logf("%+v\n", canceledOrder)
 }
-*/
+
 
 func TestGetOpenOrders(t *testing.T) {
 
@@ -153,3 +166,4 @@ func TestGetOpenOrders(t *testing.T) {
     t.Logf("%+v\n", openOrders)
 }
 
+*/
