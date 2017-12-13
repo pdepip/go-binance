@@ -69,7 +69,7 @@ type Trade struct {
     Commission      float64 `json:"commission,string"`
     CommissionAsset string  `json:"commissionAsset"`
     Time            int64   `json:"time"`
-    IsBuyer         bool    `json:"isBusyer"`
+    IsBuyer         bool    `json:"isBuyer"`
     IsMaker         bool    `json:"isMaker"`
     IsBestMatch     bool    `json:"isBestMatch"`
 }
