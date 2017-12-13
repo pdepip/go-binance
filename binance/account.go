@@ -8,7 +8,6 @@ package binance
 
 import (
     "fmt"
-    "time"
 )
 
 
@@ -149,10 +148,10 @@ func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, er
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 
-    timeStamp := unixMillis(time.Now())
-    recvWindow := recvWindow(10 * time.Second)
+    //timeStamp := unixMillis(time.Now())
+    //recvWindow := recvWindow(5 * time.Second)
 
-    reqUrl := fmt.Sprintf("v3/myTrades?symbol=%s&timestamp=%d&recvWindow=%d", symbol, timeStamp, recvWindow)
+    reqUrl := fmt.Sprintf("v3/myTrades?symbol=%s", symbol)
 
     _, err = b.client.do("GET", reqUrl, "", true, &trades)
     if err != nil {
