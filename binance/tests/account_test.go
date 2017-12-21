@@ -19,6 +19,32 @@ func TestGetTrades(t *testing.T) {
     t.Logf("%+v\n", trades)
 }
 
+
+func TestGetWithdraws(t *testing.T) {
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    withdraws, err := client.GetWithdrawHistory()
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", withdraws)
+}
+
+
+func TestGetDeposits(t *testing.T) {
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    deposits, err := client.GetDepositHistory()
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", deposits)
+}
+
 /*
 
 func TestGetPositions(t *testing.T) {

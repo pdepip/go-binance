@@ -16,7 +16,7 @@ import (
 )
 
 const (
-    BaseUrl = "https://www.binance.com/api"
+    BaseUrl = "https://www.binance.com"
 )
 
 type Binance struct {
