@@ -52,7 +52,7 @@ type MarketOrder struct {
     RecvWindow int64
 }
 
-func (m *MarketOrder) ValidateMarketOrder() error { 
+func (m *MarketOrder) ValidateMarketOrder() error {
     switch {
         case len(m.Symbol) == 0:
             return errors.New("Order must contain a symbol")

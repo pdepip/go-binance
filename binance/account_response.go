@@ -39,7 +39,7 @@ type PlacedOrder struct {
 type CanceledOrder struct {
     Symbol            string `json:"symbol"`
     OrigClientOrderId string `json:"origClientOrderId"`
-    OrderId           int64  `json:"orderId"` 
+    OrderId           int64  `json:"orderId"`
     ClientOrderId     string `json:"clientOrderId"`
 }
 

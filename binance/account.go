@@ -11,6 +11,15 @@ import (
 )
 
 
+func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
+    _, err = b.client.do("GET", "v1/exchangeInfo", "", false, &exchangeinfo)
+    if err != nil {
+        return
+    }
+
+    return
+}
+
 // Get Basic Account Information
 func (b *Binance) GetAccountInfo() (account Account, err error) {
 
@@ -38,7 +47,7 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
 
     positions = make([]Balance, len(account.Balances))
     i := 0
-        
+
     for _, balance := range account.Balances {
         if balance.Free != 0.0 || balance.Locked != 0.0 {
             positions[i] = balance
@@ -96,7 +105,7 @@ func (b *Binance) CancelOrder(query OrderQuery) (order CanceledOrder, err error)
         return
     }
 
-    reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d&recvWindow", query.Symbol, query.OrderId, query.RecvWindow)
+    reqUrl := fmt.Sprintf("v3/order?symbol=%s&orderId=%d&recvWindow=%d", query.Symbol, query.OrderId, query.RecvWindow)
 
     _, err = b.client.do("DELETE", reqUrl, "", true, &order)
     if err != nil {
@@ -127,16 +136,8 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 
 
 // Retrieve All Open Orders
-func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, err error) {
-
-    err = query.ValidateOpenOrdersQuery()
-    if err != nil {
-        return
-    }
-
-    reqUrl := fmt.Sprintf("v3/openOrders?symbol=%s&recvWindow=%d", query.Symbol, query.RecvWindow)
- 
-    _, err = b.client.do("GET", reqUrl, "", true, &orders)
+func (b *Binance) GetOpenOrders() (orders []OrderStatus, err error) {
+    _, err = b.client.do("GET", "v3/openOrders", "", true, &orders)
     if err != nil {
         return
     }
@@ -147,13 +148,10 @@ func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, er
 //
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
-
     //timeStamp := unixMillis(time.Now())
     //recvWindow := recvWindow(5 * time.Second)
 
-    reqUrl := fmt.Sprintf("v3/myTrades?symbol=%s", symbol)
-
-    _, err = b.client.do("GET", reqUrl, "", true, &trades)
+    _, err = b.client.do("GET", "v3/myTrades?symbol=" + symbol, "", true, &trades)
     if err != nil {
         return
     }
