@@ -47,6 +47,7 @@ func (q *SymbolQuery) ValidateSymbolQuery() error {
 type KlineQuery struct {
     Symbol    string
     Interval  string
+    Limit     int64
 }
 
 func (q *KlineQuery) ValidateKlineQuery() error {
@@ -55,6 +56,9 @@ func (q *KlineQuery) ValidateKlineQuery() error {
             return errors.New("KlineQuery requires a symbol")
         case !IntervalEnum[q.Interval]:
             return errors.New("Invalid Kline Interval")
+        case q.Limit == 0:
+            q.Limit = 500
+            return nil
         default:
             return nil
     }

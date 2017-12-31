@@ -19,7 +19,7 @@ func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
         return
     }
 
-    reqUrl := fmt.Sprintf("v1/depth?symbol=%s&limit=%d", q.Symbol, q.Limit)
+    reqUrl := fmt.Sprintf("api/v1/depth?symbol=%s&limit=%d", q.Symbol, q.Limit)
     _, err = b.client.do("GET", reqUrl, "", false, &book)
 
     return
@@ -34,7 +34,7 @@ func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
         return
     }
 
-    reqUrl := fmt.Sprintf("v1/aggTrades?symbol=%s", q.Symbol)
+    reqUrl := fmt.Sprintf("api/v1/aggTrades?symbol=%s", q.Symbol)
 
     _, err = b.client.do("GET", reqUrl, "", false, &trades)
     return
@@ -49,7 +49,7 @@ func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
         return
     }
 
-    reqUrl := fmt.Sprintf("v1/klines?symbol=%s&interval=%s", q.Symbol, q.Interval)
+    reqUrl := fmt.Sprintf("api/v1/klines?symbol=%s&interval=%s&limit=%d", q.Symbol, q.Interval, q.Limit)
 
     _, err = b.client.do("GET", reqUrl, "", false, &klines)
     if err != nil {
@@ -68,7 +68,7 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
         return
     }
 
-    reqUrl := fmt.Sprintf("v1/ticker/24hr?symbol=%s", q.Symbol)
+    reqUrl := fmt.Sprintf("api/v1/ticker/24hr?symbol=%s", q.Symbol)
     _, err = b.client.do("GET", reqUrl, "", false, &changeStats)
 
     return
@@ -78,7 +78,7 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 // Latest price for all symbols.
 func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 
-    reqUrl := "v1/ticker/allPrices"
+    reqUrl := "api/v1/ticker/allPrices"
     _, err = b.client.do("GET", reqUrl, "", false, &prices)
 
     return
@@ -112,7 +112,7 @@ func (b *Binance) GetLastPrice(q SymbolQuery) (price TickerPrice, err error) {
 // Best price/qty on the order book for all symbols.
 func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
 
-    reqUrl := "v1/ticker/allBookTickers"
+    reqUrl := "api/v1/ticker/allBookTickers"
     _, err = b.client.do("GET", reqUrl, "", false, &booktickers)
 
     return

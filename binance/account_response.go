@@ -74,3 +74,32 @@ type Trade struct {
     IsBestMatch     bool    `json:"isBestMatch"`
 }
 
+// Result from: GET /api/v3/depositHistory
+type Deposit struct {
+    InsertTime int64   `json:"insertTime"`
+    Amount     float64 `json:"amount"`
+    Asset      string  `json:"asset"`
+    Address    string  `json:"address"`
+    TxId       string  `json:"txId"`
+    Status     int64   `json:"status"`
+}
+
+// Result from: GET /api/v3/withdrawHistory
+type Withdraw struct {
+    Id        string  `json:"id"`
+    Amount    float64 `json:"amount"`
+    Address   string  `json:"address"`
+    Asset     string  `json:"asset"`
+    TxId      string  `json:"txId"`
+    ApplyTime int64   `json:"applyTime"`
+    Status    int64   `json:"status"`
+}
+
+type WithdrawList struct {
+    Withdraws []Withdraw `json:"withdrawList"`
+}
+
+type DepositList struct {
+    Deposits []Deposit `json:"depositList"`
+}
+

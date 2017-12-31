@@ -2,7 +2,7 @@ package market_test
 
 import (
     "testing"
-    "go-binance/binance"
+    "github.com/pdepip/go-binance/binance"
 )
 
 func TestGetOrderBook(t *testing.T) {
