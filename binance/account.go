@@ -145,13 +145,13 @@ func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, er
         return
     }
     reqUrl := fmt.Sprintf("api/v3/openOrders?symbol=%s&recvWindow=%d", query.Symbol, query.RecvWindow)
-      _, err = b.client.do("GET", reqUrl, "", true, &orders)
-     if err != nil {
-         return
-     }
+    _, err = b.client.do("GET", reqUrl, "", true, &orders)
+    if err != nil {
+        return
+    }
 
-     return
- }
+    return
+}
 
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
