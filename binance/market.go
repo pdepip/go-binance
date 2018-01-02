@@ -118,3 +118,13 @@ func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
     return
 }
 
+// Exchange filters for all symbols
+func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
+
+    _, err = b.client.do("GET", "v1/exchangeInfo", "", false, &exchangeinfo)
+    if err != nil {
+        return
+    }
+
+    return
+}

@@ -11,15 +11,6 @@ import (
 )
 
 
-func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
-    _, err = b.client.do("GET", "v1/exchangeInfo", "", false, &exchangeinfo)
-    if err != nil {
-        return
-    }
-
-    return
-}
-
 // Get Basic Account Information
 func (b *Binance) GetAccountInfo() (account Account, err error) {
 
@@ -136,7 +127,7 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 
 
 // Retrieve All Open Orders
-func (b *Binance) GetOpenOrders() (orders []OrderStatus, err error) {
+func (b *Binance) GetAllOpenOrders() (orders []OrderStatus, err error) {
     _, err = b.client.do("GET", "v3/openOrders", "", true, &orders)
 
     if err != nil {
@@ -145,6 +136,22 @@ func (b *Binance) GetOpenOrders() (orders []OrderStatus, err error) {
 
     return
 }
+
+// Retrieve All Open Orders for a given symbol
+func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, err error) {
+
+    err = query.ValidateOpenOrdersQuery()
+    if err != nil {
+        return
+    }
+    reqUrl := fmt.Sprintf("api/v3/openOrders?symbol=%s&recvWindow=%d", query.Symbol, query.RecvWindow)
+      _, err = b.client.do("GET", reqUrl, "", true, &orders)
+     if err != nil {
+         return
+     }
+
+     return
+ }
 
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
