@@ -27,7 +27,7 @@ func (b *Binance) GetOrderBook(q OrderBookQuery) (book OrderBook, err error) {
 }
 
 //GetAggTrades Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
-func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
+func (b *Binance) GetAggTrades(q AggTradesQuery) (trades []AggTrade, err error) {
 
 	err = q.ValidateSymbolQuery()
 	if err != nil {
@@ -39,7 +39,7 @@ func (b *Binance) GetAggTrades(q SymbolQuery) (trades []AggTrade, err error) {
 		return nil, err
 	}
 
-	reqUrl := fmt.Sprintf("api/v1/aggTrades?%s", qs)
+	reqUrl := fmt.Sprintf("api/v1/aggTrades?%s", qs.Encode())
 
 	_, err = b.client.do("GET", reqUrl, "", false, &trades)
 	return

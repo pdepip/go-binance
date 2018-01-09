@@ -8,7 +8,6 @@ package binance
 
 import (
 	"errors"
-	"time"
 )
 
 // Input for: GET /api/v1/depth
@@ -44,11 +43,11 @@ func (q *SymbolQuery) ValidateSymbolQuery() error {
 
 //AggTradesQuery Input for: GET /api/v1/aggTrades
 type AggTradesQuery struct {
-	Symbol    string     `url:"symbol"`
-	FromID    int64      `url:"fromId,omitempty"`
-	StartTime *time.Time `url:"startTime,omitempty"`
-	EndTime   *time.Time `url:"endTime,omitempty"`
-	Limit     int        `url:"limit,omitempty"`
+	Symbol    string `url:"symbol"`
+	FromID    int64  `url:"fromId,omitempty"`
+	StartTime int64  `url:"startTime,omitempty"`
+	EndTime   int64  `url:"endTime,omitempty"`
+	Limit     int    `url:"limit,omitempty"`
 }
 
 //ValidateSymbolQuery validate query input
