@@ -21,6 +21,8 @@ type LimitOrder struct {
     RecvWindow  int64
 }
 
+const recvWindow = 15000
+
 // Validating a Limit Order
 func (l *LimitOrder) ValidateLimitOrder() error {
     switch {
@@ -37,7 +39,7 @@ func (l *LimitOrder) ValidateLimitOrder() error {
         case l.Price <= 0.0:
             return errors.New("Invalid or empty order price")
         case l.RecvWindow == 0:
-            l.RecvWindow = 5000
+            l.RecvWindow = recvWindow
             return nil
         default:
             return nil
@@ -61,7 +63,7 @@ func (m *MarketOrder) ValidateMarketOrder() error {
         case m.Quantity <= 0.0:
             return errors.New("Invalid or empty order quantity")
         case m.RecvWindow == 0:
-            m.RecvWindow = 5000
+            m.RecvWindow = recvWindow
             return nil
         default:
             return nil
@@ -83,7 +85,7 @@ func (q *OrderQuery) ValidateOrderQuery() error {
         case q.OrderId == 0:
             return errors.New("OrderQuery must contain an OrderId")
         case q.RecvWindow == 0:
-            q.RecvWindow = 5000
+            q.RecvWindow = recvWindow
             return nil
         default:
             return nil
@@ -102,7 +104,7 @@ func (q *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
         case len(q.Symbol) == 0:
             return errors.New("OpenOrderQuery must contain a symbol")
         case q.RecvWindow == 0:
-            q.RecvWindow = 5000
+            q.RecvWindow = recvWindow
             return nil
         default:
             return nil
