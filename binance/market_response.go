@@ -92,9 +92,9 @@ type TickerPrice struct {
 type BookTicker struct {
     Symbol      string  `json:"symbol"`
     BidPrice    float64 `json:"bidPrice,string"`
-    BidQuantity float64 `json:"bidQuantity,string"`
+    BidQuantity float64 `json:"bidQty,string"`
     AskPrice    float64 `json:"askPrice,string"`
-    AskQuantity float64 `json:"askQuantity,string"`
+    AskQuantity float64 `json:"askQty,string"`
 }
 
 
