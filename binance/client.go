@@ -30,20 +30,15 @@ type BadRequest struct {
 
 
 func handleError(resp *http.Response) error {
-
-    if resp.StatusCode == 400 {
-
+    if resp.StatusCode != 200 {
         body, err := ioutil.ReadAll(resp.Body)
         if err != nil {
             return err
         }
-
-        errorText := fmt.Sprintf("Bad Request: %s", string(body))
-        return errors.New(errorText)
-    } else {
-        return nil
+ 
+        return fmt.Errorf("Bad response Status %s. Response Body: %s", resp.Status, string(body))
     }
-
+    return nil
 }
 
 
@@ -98,8 +93,8 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
     }
 
     // Check for error
-    err = handleError(resp)
     defer resp.Body.Close()
+    err = handleError(resp)
     if err != nil {
         return
     }
