@@ -1,30 +1,29 @@
 /*
 
-    get_positions.go
-        Example script showing how to call route: /api/v3/account
+   get_positions.go
+       Example script showing how to call route: /api/v3/account
 
 */
 
 package main
 
 import (
-    "os"
-    "fmt"
-    "go-binance/binance"
+	"fmt"
+	"go-binance/binance"
+	"os"
 )
 
 func main() {
 
-    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-    positions, err := client.GetPositions()
+	client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+	positions, err := client.GetPositions()
 
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
-    for _, p := range positions {
-        fmt.Println(p.Asset, p.Free, p.Locked)
-    }
+	for _, p := range positions {
+		fmt.Println(p.Asset, p.Free, p.Locked)
+	}
 
 }
-
