@@ -32,6 +32,7 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
     account := Account{}
 
     _, err = b.client.do("GET", reqUrl, "", true, &account)
+    fmt.Println(account, err)
     if err != nil {
         return
     }

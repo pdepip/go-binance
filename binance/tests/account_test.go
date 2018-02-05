@@ -7,6 +7,7 @@ import (
 )
 
 
+/*
 func TestGetTrades(t *testing.T) {
     client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
 
@@ -45,7 +46,7 @@ func TestGetDeposits(t *testing.T) {
     t.Logf("%+v\n", deposits)
 }
 
-/*
+*/
 
 func TestGetPositions(t *testing.T) {
 
@@ -60,7 +61,7 @@ func TestGetPositions(t *testing.T) {
 }
 
 
-
+/*
     THE FOLLOWING TESTS WILL PLACE ACTUAL ORDERS ON THE BINANCE EXCHANGE
 
 func TestLimitOrder(t *testing.T) {
