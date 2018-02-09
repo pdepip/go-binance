@@ -128,3 +128,17 @@ func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
 
     return
 }
+
+// Ping Rest API. If no error is returned, API is up and running.
+func (b *Binance) Ping() (pingResponse PingResponse, err error) {
+	_, err = b.client.do("GET", "api/v1/ping", "", false, &pingResponse)
+
+	return
+}
+
+// Ping Withdrawal API. Status is returned in response.
+func (b *Binance) GetWithdrawalSystemStatus() (withdrawalSystemStatus WithdrawalSystemStatus, err error) {
+	_, err = b.client.do("GET", "wapi/v3/systemStatus.html", "", false, &withdrawalSystemStatus)
+
+	return
+}
