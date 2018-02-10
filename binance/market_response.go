@@ -153,6 +153,19 @@ type RateLimit struct {
     RateLimitType string `json:"rateLimitType"`
 }
 
+type PingResponse struct{}
+
+type WithdrawalSystemStatus struct {
+	Status SystemStatus `json:"status"`
+	Msg    string       `json:"msg"`
+}
+
+type SystemStatus int64
+
+const (
+	SystemStatusNormal      SystemStatus = 0
+	SystemStatusMaintenance SystemStatus = 1
+)
 
 // Custom Unmarshal function to handle response data format
 func (k *Kline) UnmarshalJSON(b []byte) error {
