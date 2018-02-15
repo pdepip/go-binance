@@ -1,24 +1,24 @@
 /*
 
-    Stores request structs & their respectivate validation functions for Binance API
+   Stores request structs & their respectivate validation functions for Binance API
 
 */
 
 package binance
 
 import (
-    "errors"
+	"errors"
 )
 
 // Input for: POST /api/v3/order
 type LimitOrder struct {
-    Symbol      string
-    Side        string
-    Type        string
-    TimeInForce string
-    Quantity    float64
-    Price       float64
-    RecvWindow  int64
+	Symbol      string
+	Side        string
+	Type        string
+	TimeInForce string
+	Quantity    float64
+	Price       float64
+	RecvWindow  int64
 }
 
 const recvWindow = 15000
@@ -47,11 +47,11 @@ func (l *LimitOrder) ValidateLimitOrder() error {
 }
 
 type MarketOrder struct {
-    Symbol     string
-    Side       string
-    Type       string
-    Quantity   float64
-    RecvWindow int64
+	Symbol     string
+	Side       string
+	Type       string
+	Quantity   float64
+	RecvWindow int64
 }
 
 func (m *MarketOrder) ValidateMarketOrder() error {
@@ -70,12 +70,11 @@ func (m *MarketOrder) ValidateMarketOrder() error {
     }
 }
 
-
 // Input for: GET & DELETE /api/v3/order
 type OrderQuery struct {
-    Symbol     string
-    OrderId    int64
-    RecvWindow int64
+	Symbol     string
+	OrderId    int64
+	RecvWindow int64
 }
 
 func (q *OrderQuery) ValidateOrderQuery() error {
@@ -92,11 +91,10 @@ func (q *OrderQuery) ValidateOrderQuery() error {
     }
 }
 
-
 // Input for: GET /api/v3/openOrders
 type OpenOrdersQuery struct {
-    Symbol     string
-    RecvWindow int64
+	Symbol     string
+	RecvWindow int64
 }
 
 func (q *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
