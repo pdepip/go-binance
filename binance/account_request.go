@@ -21,7 +21,7 @@ type LimitOrder struct {
 	RecvWindow  int64
 }
 
-const recvWindow = 15000
+const recvWindow = 25000
 
 // Validating a Limit Order
 func (l *LimitOrder) ValidateLimitOrder() error {
