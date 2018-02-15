@@ -10,10 +10,12 @@ import (
 	"fmt"
 )
 
+const recvWindow = 25000
+
 // Get Basic Account Information
 func (b *Binance) GetAccountInfo() (account Account, err error) {
 
-	reqUrl := fmt.Sprintf("api/v3/account")
+	reqUrl := fmt.Sprintf("api/v3/account?recvWindow=%d", recvWindow)
 
 	_, err = b.client.do("GET", reqUrl, "", true, &account)
 	if err != nil {
@@ -25,8 +27,8 @@ func (b *Binance) GetAccountInfo() (account Account, err error) {
 
 // Filter Basic Account Information To Retrieve Current Holdings
 func (b *Binance) GetPositions() (positions []Balance, err error) {
-
-	reqUrl := fmt.Sprintf("api/v3/account")
+    
+	reqUrl := fmt.Sprintf("api/v3/account?recvWindow=%d", recvWindow)
 	account := Account{}
 
 	_, err = b.client.do("GET", reqUrl, "", true, &account)
@@ -56,7 +58,7 @@ func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 	}
 
 	reqUrl := fmt.Sprintf("api/v3/order?symbol=%s&side=%s&type=%s&timeInForce=%s&quantity=%f&price=%f&recvWindow=%d", l.Symbol, l.Side, l.Type, l.TimeInForce, l.Quantity, l.Price, l.RecvWindow)
-
+ 
 	_, err = b.client.do("POST", reqUrl, "", true, &res)
 	if err != nil {
 		return
@@ -149,7 +151,7 @@ func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, er
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 
-	reqUrl := fmt.Sprintf("api/v3/myTrades?symbol=%s", symbol)
+	reqUrl := fmt.Sprintf("api/v3/myTrades?symbol=%s&recvWindow=%d", symbol, recvWindow)
 
 	_, err = b.client.do("GET", reqUrl, "", true, &trades)
 
@@ -163,7 +165,7 @@ func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 // Retrieves all withdrawals
 func (b *Binance) GetWithdrawHistory() (withdraws WithdrawList, err error) {
 
-	reqUrl := fmt.Sprintf("wapi/v3/withdrawHistory.html")
+	reqUrl := fmt.Sprintf("wapi/v3/withdrawHistory.html?recvWindow=%d", recvWindow)
 
 	_, err = b.client.do("GET", reqUrl, "", true, &withdraws)
 	if err != nil {
@@ -176,7 +178,7 @@ func (b *Binance) GetWithdrawHistory() (withdraws WithdrawList, err error) {
 // Retrieves all deposits
 func (b *Binance) GetDepositHistory() (deposits DepositList, err error) {
 
-	reqUrl := fmt.Sprintf("wapi/v3/depositHistory.html")
+	reqUrl := fmt.Sprintf("wapi/v3/depositHistory.html?recvWindow=%d", recvWindow)
 
 	_, err = b.client.do("GET", reqUrl, "", true, &deposits)
 	if err != nil {
