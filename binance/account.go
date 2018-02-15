@@ -29,7 +29,7 @@ func (b *Binance) GetAccountInfo() (account Account, err error) {
 func (b *Binance) GetPositions() (positions []Balance, err error) {
     
 	reqUrl := fmt.Sprintf("api/v3/account?recvWindow=%d", recvWindow)
-	account := Account{}
+    account := Account{}
 
 	_, err = b.client.do("GET", reqUrl, "", true, &account)
 	if err != nil {
