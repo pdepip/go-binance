@@ -106,3 +106,31 @@ func (q *OpenOrdersQuery) ValidateOpenOrdersQuery() error {
 		return nil
 	}
 }
+
+// Input for: GET /api/v3/allOrders
+type AllOrdersQuery struct {
+	Symbol     string
+	OrderId    int64
+	Limit      int64
+	RecvWindow int64
+}
+
+func (q *AllOrdersQuery) ValidateAllOrdersQuery() error {
+	if len(q.Symbol) == 0 {
+		return errors.New("AllOrderQuery must contain a symbol")
+	}
+
+	if q.Limit > 500 {
+		return errors.New("AllOrderQuery limit max is 500")
+	}
+
+	if q.RecvWindow == 0 {
+		q.RecvWindow = 5000
+	}
+
+	if q.Limit == 0 {
+		q.Limit = 500
+	}
+
+	return nil
+}

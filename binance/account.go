@@ -146,6 +146,24 @@ func (b *Binance) GetOpenOrders(query OpenOrdersQuery) (orders []OrderStatus, er
 	return
 }
 
+// Get all account orders; active, canceled, or filled.
+func (b *Binance) GetAllOrders(query AllOrdersQuery) (orders []OrderStatus, err error) {
+	err = query.ValidateAllOrdersQuery()
+	if err != nil {
+		return
+	}
+	reqUrl := fmt.Sprintf("api/v3/allOrders?symbol=%s&recvWindow=%d&limit=%d", query.Symbol, query.RecvWindow, query.Limit)
+	if query.OrderId != 0 {
+		reqUrl += fmt.Sprintf("&orderId=%d", query.OrderId)
+	}
+	_, err = b.client.do("GET", reqUrl, "", true, &orders)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Retrieves all trades
 func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 
