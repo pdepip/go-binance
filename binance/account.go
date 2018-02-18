@@ -10,7 +10,7 @@ import (
 	"fmt"
 )
 
-const recvWindow = 25000
+const recvWindow = 100000
 
 // Get Basic Account Information
 func (b *Binance) GetAccountInfo() (account Account, err error) {
