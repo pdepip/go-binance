@@ -19,6 +19,17 @@ func TestGetTrades(t *testing.T) {
     t.Logf("%+v\n", trades)
 }
 
+func TestGetTrade(t *testing.T) {
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    trade, err := client.GetTrade("NANOBTC", 1004032)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", trade)
+}
+
 
 func TestGetWithdraws(t *testing.T) {
     client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))

@@ -177,6 +177,25 @@ func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 	return
 }
 
+func (b *Binance) GetTrade(symbol string, id int64) (trade Trade, err error) {
+
+    reqUrl := fmt.Sprintf("api/v3/myTrades?symbol=%s&fromId=%d", symbol, id)
+
+    var trades []Trade
+    _, err = b.client.do("GET", reqUrl, "", true, &trades)
+    if err != nil {
+        return
+    }
+
+    for _, t := range trades {
+        if t.Id == id {
+            trade = t
+            break
+        }
+    }
+    return
+}
+
 //
 // Retrieves all withdrawals
 func (b *Binance) GetWithdrawHistory() (withdraws WithdrawList, err error) {
