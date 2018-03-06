@@ -177,7 +177,7 @@ func (b *Binance) GetTrades(symbol string) (trades []Trade, err error) {
 	return
 }
 
-func (b *Binance) GetTrade(symbol string, id int64) (trade Trade, err error) {
+func (b *Binance) GetTradesFromOrder(symbol string, id int64) (matchingTrades []Trade, err error) {
 
     reqUrl := fmt.Sprintf("api/v3/myTrades?symbol=%s", symbol)
 
@@ -189,8 +189,7 @@ func (b *Binance) GetTrade(symbol string, id int64) (trade Trade, err error) {
 
     for _, t := range trades {
         if t.OrderId == id {
-            trade = t
-            break
+            matchingTrades = append(matchingTrades, t)
         }
     }
     return

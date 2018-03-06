@@ -7,6 +7,7 @@ import (
 )
 
 
+
 func TestGetTrades(t *testing.T) {
     client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
 
@@ -17,17 +18,6 @@ func TestGetTrades(t *testing.T) {
     }
 
     t.Logf("%+v\n", trades)
-}
-
-func TestGetTrade(t *testing.T) {
-    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
-
-    trade, err := client.GetTrade("NANOBTC", 1004032)
-    if err != nil {
-        t.Fatal(err)
-    }
-
-    t.Logf("%+v\n", trade)
 }
 
 
@@ -54,6 +44,17 @@ func TestGetDeposits(t *testing.T) {
     }
 
     t.Logf("%+v\n", deposits)
+}
+
+func TestGetTradesFromOrder(t *testing.T) {
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    trades, err := client.GetTradesFromOrder("LINKETH", 10107102)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", trades)
 }
 
 /*
