@@ -14,7 +14,7 @@ import (
 
 // Result from: GET /api/v1/depth
 type OrderBook struct {
-	LastUpdatedId int64   `json:"lastUpdatedId"`
+	LastUpdateId  int64   `json:"lastUpdateId"`
 	Bids          []Order `json:"bids"`
 	Asks          []Order `json:"asks"`
 }
