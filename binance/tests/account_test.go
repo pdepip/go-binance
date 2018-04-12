@@ -6,6 +6,17 @@ import (
     "github.com/pdepip/go-binance/binance"
 )
 
+func TestGetAccountInfo(t *testing.T) {
+
+    client := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+
+    res, err := client.GetAccountInfo()
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", res)
+}
 
 
 func TestGetTrades(t *testing.T) {
