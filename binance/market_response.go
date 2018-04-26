@@ -48,6 +48,7 @@ func (o *Order) UnmarshalJSON(b []byte) error {
 
 // Result from: GET /api/v1/ticker/24hr
 type ChangeStats struct {
+	Symbol 			   string  `json:"symbol, string"`
 	PriceChange        float64 `json:"priceChange,string"`
 	PriceChangePercent float64 `json:"priceChangePercent,string"`
 	WeightedAvgPrice   float64 `json:"weightedAvgPrice,string"`
