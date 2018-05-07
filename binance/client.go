@@ -54,7 +54,7 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
 
 	fullUrl := fmt.Sprintf("%s/%s", BaseUrl, resource)
 
-	req, err := http.NewRequest(method, fullUrl, strings.NewReader(payload))
+	req, err := http.NewRequest(method, fullUrl, nil)
 	if err != nil {
 		return
 	}
