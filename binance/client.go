@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -40,12 +41,20 @@ func handleError(resp *http.Response) error {
 	return nil
 }
 
-// Creates a new Binance HTTP Client
-func NewClient(key, secret string) (c *Client) {
+// NewClient Creates a new Binance HTTP Client
+func NewClient(key, secret string, proxy ...*url.URL) (c *Client) {
+	transport := &http.Transport{}
+	if len(proxy) > 0 {
+		if pxy := proxy[0]; pxy != nil {
+			transport.Proxy = http.ProxyURL(pxy)
+		}
+	}
 	client := &Client{
-		key:        key,
-		secret:     secret,
-		httpClient: &http.Client{},
+		key:    key,
+		secret: secret,
+		httpClient: &http.Client{
+			Transport: transport,
+		},
 	}
 	return client
 }
