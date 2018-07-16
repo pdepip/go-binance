@@ -109,7 +109,7 @@ func (b *Binance) CheckOrder(query OrderQuery) (status OrderStatus, err error) {
 		return
 	}
 
-	reqUrl := fmt.Sprintf("api/v3/order?symbol=%s&orderId=%d&origClientOrderId=%s&recvWindow=%d", query.Symbol, query.OrderId, query.RecvWindow)
+	reqUrl := fmt.Sprintf("api/v3/order?symbol=%s&orderId=%d&recvWindow=%d", query.Symbol, query.OrderId, query.RecvWindow)
 
 	_, err = b.client.do("GET", reqUrl, "", true, &status)
 	if err != nil {
