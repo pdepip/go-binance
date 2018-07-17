@@ -63,7 +63,7 @@ func (c *Client) do(method, resource, payload string, auth bool, result interfac
 	if auth {
 
 		if len(c.key) == 0 || len(c.secret) == 0 {
-			err = errors.New("Private endpoints requre you to set an API Key and API Secret")
+			err = errors.New("Private endpoints require you to set an API Key and API Secret")
 			return
 		}
 
