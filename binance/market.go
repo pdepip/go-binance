@@ -111,6 +111,19 @@ func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
 	return
 }
 
+func (b *Binance) GetBookTicker(q SymbolQuery) (bookticker BookTicker, err error) {
+
+	err = q.ValidateSymbolQuery()
+	if err != nil {
+		return
+	}
+
+	reqUrl := fmt.Sprintf("api/v3/ticker/bookTicker?symbol=%s", q.Symbol)
+	b.client.do("GET", reqUrl, "", false, &bookticker)
+
+	return
+}
+
 // Exchange filters for all symbols
 func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
 
