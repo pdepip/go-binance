@@ -70,6 +70,15 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 	return
 }
 
+// 24 hour price for all statistics
+func (b *Binance) GetAll24Hr(q SymbolQuery) (changeStats []ChangeStats, err error) {
+
+	reqUrl := fmt.Sprintf("api/v1/ticker/24hr")
+	_, err = b.client.do("GET", reqUrl, "", false, &changeStats)
+
+	return
+}
+
 // Latest price for all symbols.
 func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 
