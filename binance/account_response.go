@@ -49,7 +49,7 @@ type OrderStatus struct {
 	Price               float64 `json:"price,string"`
 	OrigQty             float64 `json:"origQty,string"`
 	ExecutedQty         float64 `json:"executedQty,string"`
-	CummulativeQuoteQty string  `json:"cummulativeQuoteQty,string"`
+	CummulativeQuoteQty float64 `json:"cummulativeQuoteQty,string"`
 	Status              string  `json:"status"`
 	TimeInForce         string  `json:"timeInForce"`
 	Type                string  `json:"type"`
@@ -65,7 +65,7 @@ type OrderStatus struct {
 type Trade struct {
 	Symbol          string  `json:"symbol"`
 	Id              int64   `json:"id"`
-    OrderId         int64   `json:"orderId"`
+	OrderId         int64   `json:"orderId"`
 	Price           float64 `json:"price,string"`
 	Quantity        float64 `json:"qty,string"`
 	Commission      float64 `json:"commission,string"`
