@@ -47,6 +47,12 @@ func (b *Binance) GetKlines(q KlineQuery) (klines []Kline, err error) {
 	}
 
 	reqUrl := fmt.Sprintf("api/v1/klines?symbol=%s&interval=%s&limit=%d", q.Symbol, q.Interval, q.Limit)
+	if q.StartTime != 0 {
+		reqUrl += fmt.Sprintf("&startTime=%d", q.StartTime)
+	}
+	if q.EndTime != 0 {
+		reqUrl += fmt.Sprintf("&endTime=%d", q.EndTime)
+	}
 
 	_, err = b.client.do("GET", reqUrl, "", false, &klines)
 	if err != nil {
@@ -73,7 +79,7 @@ func (b *Binance) Get24Hr(q SymbolQuery) (changeStats ChangeStats, err error) {
 // Latest price for all symbols.
 func (b *Binance) GetAllPrices() (prices []TickerPrice, err error) {
 
-	reqUrl := "api/v1/ticker/allPrices"
+	reqUrl := "api/v3/ticker/price"
 	_, err = b.client.do("GET", reqUrl, "", false, &prices)
 
 	return
@@ -87,17 +93,8 @@ func (b *Binance) GetLastPrice(q SymbolQuery) (price TickerPrice, err error) {
 		return
 	}
 
-	var prices []TickerPrice
-	prices, err = b.GetAllPrices()
-	if err != nil {
-		return
-	}
-
-	for _, p := range prices {
-		if p.Symbol == q.Symbol {
-			return p, nil
-		}
-	}
+	reqUrl := fmt.Sprintf("api/v3/ticker/price?symbol=%s", q.Symbol)
+	_, err = b.client.do("GET", reqUrl, "", false, &price)
 
 	return
 }
@@ -105,7 +102,7 @@ func (b *Binance) GetLastPrice(q SymbolQuery) (price TickerPrice, err error) {
 // Best price/qty on the order book for all symbols.
 func (b *Binance) GetBookTickers() (booktickers []BookTicker, err error) {
 
-	reqUrl := "api/v1/ticker/allBookTickers"
+	reqUrl := "api/v3/ticker/bookTicker"
 	_, err = b.client.do("GET", reqUrl, "", false, &booktickers)
 
 	return
@@ -139,6 +136,20 @@ func (b *Binance) GetExchangeInfo() (exchangeinfo ExchangeInfo, err error) {
 // Ping Rest API. If no error is returned, API is up and running.
 func (b *Binance) Ping() (pingResponse PingResponse, err error) {
 	_, err = b.client.do("GET", "api/v1/ping", "", false, &pingResponse)
+
+	return
+}
+
+// Average price for one symbol in the last minutes
+func (b *Binance) GetAveragePrice(q SymbolQuery) (avgPrice AvgPrice, err error) {
+
+	err = q.ValidateSymbolQuery()
+	if err != nil {
+		return
+	}
+
+	reqUrl := fmt.Sprintf("api/v3/avgPrice?symbol=%s", q.Symbol)
+	_, err = b.client.do("GET", reqUrl, "", false, &avgPrice)
 
 	return
 }

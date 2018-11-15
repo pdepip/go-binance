@@ -82,6 +82,18 @@ func TestGetPositions(t *testing.T) {
     t.Logf("%+v\n", positions)
 }
 
+func TestGetPosition(t *testing.T) {
+
+    binance := binance.New(os.Getenv("BINANCE_KEY"), os.Getenv("BINANCE_SECRET"))
+    position, err := binance.GetPosition()
+
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", position)
+}
+
 
 
     THE FOLLOWING TESTS WILL PLACE ACTUAL ORDERS ON THE BINANCE EXCHANGE

@@ -47,6 +47,31 @@ func (b *Binance) GetPositions() (positions []Balance, err error) {
 	return positions[:i], nil
 }
 
+// Filter Basic Account Information To Retrieve Current Holding for a Given Symbol
+func (b *Binance) GetPosition(q SymbolQuery) (balance Balance, err error) {
+
+	err = q.ValidateSymbolQuery()
+	if err != nil {
+		return
+	}
+
+	reqUrl := fmt.Sprintf("api/v3/account")
+	account := Account{}
+
+	_, err = b.client.do("GET", reqUrl, "", true, &account)
+	if err != nil {
+		return
+	}
+
+	for _, balance := range account.Balances {
+		if balance.Asset == q.Symbol {
+			return balance, nil
+		}
+	}
+
+	return
+}
+
 // Place a Limit Order
 func (b *Binance) PlaceLimitOrder(l LimitOrder) (res PlacedOrder, err error) {
 
