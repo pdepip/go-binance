@@ -109,3 +109,19 @@ func TestGetBookTicker(t *testing.T) {
     t.Logf("%+v\n", res)
 
 }
+
+func TestGetAveragePrice(t *testing.T) {
+
+    query := binance.SymbolQuery{
+        Symbol: "BNBBTC",
+    }
+
+    client := binance.New("", "")
+    res, err := client.GetAveragePrice(query)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v\n", res)
+
+}

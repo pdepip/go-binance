@@ -16,6 +16,7 @@ type Account struct {
 	CanWithdraw      bool      `json:"canWithdraw"`
 	CanDeposit       bool      `json:"canDeposit"`
 	Balances         []Balance `json:"balances"`
+	UpdateTime       int64     `json:"updateTime"`
 }
 
 type Balance struct {
@@ -42,25 +43,29 @@ type CanceledOrder struct {
 
 // Result from: GET /api/v3/order
 type OrderStatus struct {
-	Symbol        string  `json:"symbol"`
-	OrderId       int64   `json:"orderId"`
-	ClientOrderId string  `json:"clientOrderId"`
-	Price         float64 `json:"price,string"`
-	OrigQty       float64 `json:"origQty,string"`
-	ExecutedQty   float64 `json:"executedQty,string"`
-	Status        string  `json:"status"`
-	TimeInForce   string  `json:"timeInForce"`
-	Type          string  `json:"type"`
-	Side          string  `json:"side"`
-	StopPrice     float64 `json:"stopPrice,string"`
-	IcebergQty    float64 `json:"icebergQty,string"`
-	Time          int64   `json:"time"`
+	Symbol              string  `json:"symbol"`
+	OrderId             int64   `json:"orderId"`
+	ClientOrderId       string  `json:"clientOrderId"`
+	Price               float64 `json:"price,string"`
+	OrigQty             float64 `json:"origQty,string"`
+	ExecutedQty         float64 `json:"executedQty,string"`
+	CummulativeQuoteQty float64 `json:"cummulativeQuoteQty,string"`
+	Status              string  `json:"status"`
+	TimeInForce         string  `json:"timeInForce"`
+	Type                string  `json:"type"`
+	Side                string  `json:"side"`
+	StopPrice           float64 `json:"stopPrice,string"`
+	IcebergQty          float64 `json:"icebergQty,string"`
+	Time                int64   `json:"time"`
+	UpdateTime          int64   `json:"updateTime"`
+	IsWorking           bool    `json:"isWorking"`
 }
 
 // Result from: GET /api/v3/myTrades
 type Trade struct {
+	Symbol          string  `json:"symbol"`
 	Id              int64   `json:"id"`
-    OrderId         int64   `json:"orderId"`
+	OrderId         int64   `json:"orderId"`
 	Price           float64 `json:"price,string"`
 	Quantity        float64 `json:"qty,string"`
 	Commission      float64 `json:"commission,string"`
